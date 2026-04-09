@@ -17,76 +17,36 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Modern deep space gradient */
-            background: radial-gradient(circle at top left, #1a1a2e, #16213e, #0f3460);
+            background: #121212;
             overflow: hidden;
         }
 
-        /* The Glass Card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 4rem 8rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .container {
+            text-align: center;
+            padding: 3rem 5rem;
+            border: 1px solid #333;
+            background: #1a1a1a;
         }
 
         h1 {
-            color: white;
-            font-size: 5rem;
-            font-weight: 900;
-            letter-spacing: 1.5rem;
-            text-indent: 1.5rem; /* Centers the text properly despite letter spacing */
+            color: #e0e0e0;
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: 0.5rem;
             text-transform: uppercase;
-            opacity: 0.9;
-            /* Subtle glow effect */
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-            animation: breathe 4s ease-in-out infinite;
         }
 
-        /* Subtle pulsing animation */
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.02); opacity: 1; }
-        }
-
-        /* Decorative background blobs to enhance the glass effect */
-        .blob {
-            position: absolute;
-            z-index: -1;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.4;
-        }
-
-        .blob-1 {
-            width: 300px;
-            height: 300px;
-            background: #4e00c2;
-            top: 20%;
-            left: 20%;
-        }
-
-        .blob-2 {
-            width: 250px;
-            height: 250px;
-            background: #0077b6;
-            bottom: 20%;
-            right: 20%;
+        p {
+            color: #888;
+            margin-top: 1rem;
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-
-    <div class="glass-card">
+    <div class="container">
         <h1>SOON</h1>
+        <p>Something new is coming.</p>
     </div>
 </body>
 </html>
