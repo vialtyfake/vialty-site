@@ -1,0 +1,34 @@
+# Dependency directories
+node_modules/
+vendor/
+packages/
+
+# Build artifacts
+dist/
+build/
+out/
+*.exe
+*.dll
+
+# Environment files
+.env
+*.env.local
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+logs/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Cache directories
+.cache/
+tmp/
+temp/   
