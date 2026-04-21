@@ -32,3 +32,5 @@ logs/
 .cache/
 tmp/
 temp/   
+.vercel
+.env*.local
