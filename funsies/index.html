@@ -210,7 +210,7 @@
         .mp-time { font-size:.58rem; color:var(--muted); min-width:3.2rem; text-align:center; font-variant-numeric:tabular-nums; }
         .mp-progress {
             -webkit-appearance:none; appearance:none; flex:1; height:4px;
-            border-radius:2px; background:var(--sur2); outline:none; cursor:pointer;
+            border-radius:2px; background:linear-gradient(to right, var(--duo-a) var(--fill, 0%), var(--sur2) var(--fill, 0%)); outline:none; cursor:pointer;
         }
         .mp-progress::-webkit-slider-thumb {
             -webkit-appearance:none; appearance:none; width:10px; height:10px;
@@ -221,8 +221,8 @@
             cursor:pointer; border:none;
         }
         .mp-volume {
-            -webkit-appearance:none; appearance:none; width:80px; height:4px;
-            border-radius:2px; background:var(--sur2); outline:none; cursor:pointer; flex-shrink:0;
+            -webkit-appearance:none; appearance:none; width:50px; height:4px;
+            border-radius:2px; background:linear-gradient(to right, var(--duo-a) var(--fill, 0%), var(--sur2) var(--fill, 0%)); outline:none; cursor:pointer; flex-shrink:0;
         }
         .mp-volume::-webkit-slider-thumb {
             -webkit-appearance:none; appearance:none; width:10px; height:10px;
@@ -236,15 +236,6 @@
             display:flex;
             align-items:center;
             gap:.4rem;
-            width:100%;
-        }
-        .mp-volume-wrap .mp-volume {
-            flex:1;
-        }
-        .mp-vol-icon {
-            font-size:.65rem;
-            color:var(--muted);
-            flex-shrink:0;
         }
 
         /* ══════════════════════════════════════════════════════
@@ -486,214 +477,6 @@
     <div class="content">
 
         <!-- ════════════════════════════════════════════════
-             MUSIC
-             Each .music-item:
-               data-color="#hex"   → accent color
-               .music-cover img    → add src for cover art
-               .music-name / .music-sub / .music-rank
-             First item in each column gets star glint automatically.
-        ═════════════════════════════════════════════════ -->
-        <section class="reveal">
-            <div class="section-header">
-                <span class="section-label">// music</span>
-                <h2 class="section-title">What I'm listening to</h2>
-            </div>
-            <div class="music-grid">
-
-                <!-- ARTISTS -->
-                <div class="music-column">
-                    <div class="music-col-header">
-                        <span class="music-col-icon">♪</span>
-                        <span class="music-col-title">Artists</span>
-                    </div>
-                    <div class="music-item top-pick" data-color="#c7a57a">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/3d/cc/a8/3dcca8b6-7883-0cd7-7729-9756909316d9/file_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c7a57a">♪</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">Ariana Grande</div>
-                            <div class="music-sub">Pop · US</div>
-                        </div>
-                        <span class="music-rank">01</span>
-                    </div>
-                    <div class="music-item" data-color="#c4112c">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/04/a8/54/04a854b5-5748-dba1-e99e-9817c87887c9/ami-identity-7d4c30a95a90f129a834aecd444aa07a-2025-09-25T23-01-04.317Z_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c4112c">♪</div></div>
-                        <div class="music-info"><div class="music-name">Doja Cat</div><div class="music-sub">R&B/Soul · US</div></div>
-                        <span class="music-rank">02</span>
-                    </div>
-                    <div class="music-item" data-color="#051f38">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/e1/f3/6a/e1f36a60-9897-162d-3697-7501eeafbc3b/a1d41336-49bd-4212-8787-57547ca3f87e_ami-identity-ef10a72d4764d04743b17fa13520b756-2024-04-08T15-24-54.609Z_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#051f38">♪</div></div>
-                        <div class="music-info"><div class="music-name">Billie Eilish</div><div class="music-sub">Alternative · US</div></div>
-                        <span class="music-rank">03</span>
-                    </div>
-                    <div class="music-item" data-color="#e9f8f5">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/cf/07/d3/cf07d3cc-7b1f-1294-0a43-612e1de21c5c/ami-identity-af8411f7c180019cd3683c527e92edb7-2025-06-19T23-30-09.515Z_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#e9f8f5">♪</div></div>
-                        <div class="music-info"><div class="music-name">BENEE</div><div class="music-sub">Alternative · New Zealand</div></div>
-                        <span class="music-rank">04</span>
-                    </div>
-                    <div class="music-item" data-color="#e7afb8">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/04/0d/cc/040dcc08-1b20-4748-898f-fc676e2060e6/ami-identity-5b05d351a6e3c7256ef7680c8aef2894-2026-04-02T16-03-02.313Z_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#e7afb8">♪</div></div>
-                        <div class="music-info"><div class="music-name">Olivia Rodrigo</div><div class="music-sub">Pop · US</div></div>
-                        <span class="music-rank">05</span>
-                    </div>
-                </div>
-
-                <!-- ALBUMS -->
-                <div class="music-column">
-                    <div class="music-col-header">
-                        <span class="music-col-icon">◫</span>
-                        <span class="music-col-title">Albums</span>
-                    </div>
-                    <div class="music-item top-pick" data-color="#c7a57a">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c7a57a">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">eternal sunshine</div>
-                            <div class="music-sub">Ariana Grande · 2024</div>
-                        </div>
-                        <span class="music-rank">01</span>
-                    </div>
-                    <div class="music-item" data-color="#ffffff">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8b/02/52/8b02528c-8282-6709-dbb3-953da86c6e37/196871470124.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#ffffff">◫</div></div>
-                        <div class="music-info"><div class="music-name">Scarlet</div><div class="music-sub">Doja Cat · 2023</div></div>
-                        <span class="music-rank">02</span>
-                    </div>
-                    <div class="music-item" data-color="#d2d3d9">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/47/73/22/477322f0-a478-54de-485a-8502d9cb3ab2/25UM1IM19859.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#d2d3d9">◫</div></div>
-                        <div class="music-info"><div class="music-name">Ur an Angel I’m Just Particles</div><div class="music-sub">BENEE · 2025</div></div>
-                        <span class="music-rank">03</span>
-                    </div>
-                    <div class="music-item" data-color="#1f79c7">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a8/c7/ea/a8c7eaf1-d92b-2ce6-74e4-1282b369cd38/196873471068.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#1f79c7">◫</div></div>
-                        <div class="music-info"><div class="music-name">Vie</div><div class="music-sub">Doja Cat · 2025</div></div>
-                        <span class="music-rank">04</span>
-                    </div>
-                    <div class="music-item" data-color="#051f38">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/92/9f/69/929f69f1-9977-3a44-d674-11f70c852d1b/24UMGIM36186.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#051f38">◫</div></div>
-                        <div class="music-info"><div class="music-name">HIT ME HARD AND SOFT</div><div class="music-sub">Billie Eilish · 2024</div></div>
-                        <span class="music-rank">05</span>
-                    </div>
-                </div>
-
-                <!-- TRACKS -->
-                <div class="music-column">
-                    <div class="music-col-header">
-                        <span class="music-col-icon">▶</span>
-                        <span class="music-col-title">Tracks</span>
-                    </div>
-                    <div class="music-item top-pick" data-color="#c7a57a">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c7a57a">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">we can't be friends (wait for your love)</div>
-                            <div class="music-sub">Ariana Grande · eternal sunshine</div>
-                        </div>
-                        <span class="music-rank">01</span>
-                    </div>
-                    <div class="music-item" data-color="#c9c9c9">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/12/5d/63/125d6389-2205-c77c-702c-8128e9020bd6/16UMGIM12432.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c9c9c9">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">Into You</div>
-                            <div class="music-sub">Ariana Grande · Dangerous Woman</div>
-                        </div>
-                        <span class="music-rank">02</span>
-                    </div>
-                    <div class="music-item" data-color="#44454a">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f8/11/ef/f811ef3b-8ca4-ac16-ba71-1dca7304a8ba/22UMGIM49145.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#44454a">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">I Like You (A Happier Song) [feat. Doja Cat]</div>
-                            <div class="music-sub">Post Malone, Doja Cat · Twelve Carat Toothache (Deluxe)</div>
-                        </div>
-                        <span class="music-rank">03</span>
-                    </div>
-                    <div class="music-item" data-color="#ffffff">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8b/02/52/8b02528c-8282-6709-dbb3-953da86c6e37/196871470124.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#ffffff">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">Paint The Town Red</div>
-                            <div class="music-sub">Doja Cat · Scarlet</div>
-                        </div>
-                        <span class="music-rank">04</span>
-                    </div>
-                    <div class="music-item" data-color="#e2bc90">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c4/7e/22/c47e22bf-0d2b-e211-815c-39c41428c6a4/23UMGIM16392.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#e2bc90">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">Feather</div>
-                            <div class="music-sub">Sabrina Carpenter · emails i can’t send fwd:</div>
-                        </div>
-                        <span class="music-rank">05</span>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ════════════════════════════════════════════════
-             MUSIC PLAYER
-             Set your song file in the <audio> src.
-             Set your artwork in the <img> inside .mp-artwork.
-        ═════════════════════════════════════════════════ -->
-        <section class="reveal">
-            <div class="music-player">
-                <div class="mp-artwork">
-                    <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/300x300bb.webp" alt="Song artwork">
-                    <div class="mp-artwork-ph">♫</div>
-                </div>
-                <div class="mp-body">
-                    <div class="mp-info">
-                        <div class="mp-title">we can't be friends (wait for your love)</div>
-                        <div class="mp-artist">Ariana Grande</div>
-                    </div>
-                    <div class="mp-controls">
-                        <button class="mp-play" id="mp-play" aria-label="Play">▶</button>
-                        <div class="mp-progress-wrap">
-                            <span class="mp-time" id="mp-current">0:00</span>
-                            <input type="range" class="mp-progress" id="mp-progress" min="0" max="100" value="0" aria-label="Seek">
-                            <span class="mp-time" id="mp-duration">0:00</span>
-                        </div>
-                        <div class="mp-volume-wrap">
-                            <span class="mp-vol-icon">🔊</span>
-                            <input type="range" class="mp-volume" id="mp-volume" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
-                        </div>
-                    </div>
-                    <audio id="mp-audio" src="/audio/we-can't-be-friends-(wait-for-your-love)-Ariana-Grande.mp3" preload="metadata"></audio>
-                </div>
-            </div>
-        </section>
-
-        <!-- ════════════════════════════════════════════════
              ROBLOX GAMES
              Top 3 .game-card: set --card-color, cover img, rank, title, by.
              Add class="top-pick" to first card for star glint.
@@ -904,7 +687,212 @@
 
         </section>
 
+        <!-- ════════════════════════════════════════════════
+             MUSIC
+             Each .music-item:
+               data-color="#hex"   → accent color
+               .music-cover img    → add src for cover art
+               .music-name / .music-sub / .music-rank
+             First item in each column gets star glint automatically.
+        ═════════════════════════════════════════════════ -->
+        <section class="reveal">
+            <div class="section-header">
+                <span class="section-label">// music</span>
+                <h2 class="section-title">What I'm listening to</h2>
+            </div>
+            <div class="music-grid">
 
+                <!-- ARTISTS -->
+                <div class="music-column">
+                    <div class="music-col-header">
+                        <span class="music-col-icon">♪</span>
+                        <span class="music-col-title">Artists</span>
+                    </div>
+                    <div class="music-item top-pick" data-color="#c7a57a">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/3d/cc/a8/3dcca8b6-7883-0cd7-7729-9756909316d9/file_cropped.png/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#c7a57a">♪</div>
+                        </div>
+                        <div class="music-info">
+                            <div class="music-name">Ariana Grande</div>
+                            <div class="music-sub">Pop · US</div>
+                        </div>
+                        <span class="music-rank">01</span>
+                    </div>
+                    <div class="music-item" data-color="#c4112c">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/04/a8/54/04a854b5-5748-dba1-e99e-9817c87887c9/ami-identity-7d4c30a95a90f129a834aecd444aa07a-2025-09-25T23-01-04.317Z_cropped.png/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#c4112c">♪</div></div>
+                        <div class="music-info"><div class="music-name">Doja Cat</div><div class="music-sub">R&B/Soul · US</div></div>
+                        <span class="music-rank">02</span>
+                    </div>
+                    <div class="music-item" data-color="#051f38">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/e1/f3/6a/e1f36a60-9897-162d-3697-7501eeafbc3b/a1d41336-49bd-4212-8787-57547ca3f87e_ami-identity-ef10a72d4764d04743b17fa13520b756-2024-04-08T15-24-54.609Z_cropped.png/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#051f38">♪</div></div>
+                        <div class="music-info"><div class="music-name">Billie Eilish</div><div class="music-sub">Alternative · US</div></div>
+                        <span class="music-rank">03</span>
+                    </div>
+                    <div class="music-item" data-color="#e9f8f5">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/cf/07/d3/cf07d3cc-7b1f-1294-0a43-612e1de21c5c/ami-identity-af8411f7c180019cd3683c527e92edb7-2025-06-19T23-30-09.515Z_cropped.png/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#e9f8f5">♪</div></div>
+                        <div class="music-info"><div class="music-name">BENEE</div><div class="music-sub">Alternative · New Zealand</div></div>
+                        <span class="music-rank">04</span>
+                    </div>
+                    <div class="music-item" data-color="#e7afb8">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/04/0d/cc/040dcc08-1b20-4748-898f-fc676e2060e6/ami-identity-5b05d351a6e3c7256ef7680c8aef2894-2026-04-02T16-03-02.313Z_cropped.png/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#e7afb8">♪</div></div>
+                        <div class="music-info"><div class="music-name">Olivia Rodrigo</div><div class="music-sub">Pop · US</div></div>
+                        <span class="music-rank">05</span>
+                    </div>
+                </div>
+
+                <!-- ALBUMS -->
+                <div class="music-column">
+                    <div class="music-col-header">
+                        <span class="music-col-icon">◫</span>
+                        <span class="music-col-title">Albums</span>
+                    </div>
+                    <div class="music-item top-pick" data-color="#c7a57a">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#c7a57a">◫</div>
+                        </div>
+                        <div class="music-info">
+                            <div class="music-name">eternal sunshine</div>
+                            <div class="music-sub">Ariana Grande · 2024</div>
+                        </div>
+                        <span class="music-rank">01</span>
+                    </div>
+                    <div class="music-item" data-color="#ffffff">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8b/02/52/8b02528c-8282-6709-dbb3-953da86c6e37/196871470124.jpg/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#ffffff">◫</div></div>
+                        <div class="music-info"><div class="music-name">Scarlet</div><div class="music-sub">Doja Cat · 2023</div></div>
+                        <span class="music-rank">02</span>
+                    </div>
+                    <div class="music-item" data-color="#d2d3d9">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/47/73/22/477322f0-a478-54de-485a-8502d9cb3ab2/25UM1IM19859.rgb.jpg/256x256bb.webp" alt="">
+                            <div class="music-cover-ph" style="--item-color:#d2d3d9">◫</div></div>
+                        <div class="music-info"><div class="music-name">Ur an Angel I’m Just Particles</div><div class="music-sub">BENEE · 2025</div></div>
+                        <span class="music-rank">03</span>
+                    </div>
+                    <div class="music-item" data-color="#1f79c7">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a8/c7/ea/a8c7eaf1-d92b-2ce6-74e4-1282b369cd38/196873471068.jpg/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#1f79c7">◫</div></div>
+                        <div class="music-info"><div class="music-name">Vie</div><div class="music-sub">Doja Cat · 2025</div></div>
+                        <span class="music-rank">04</span>
+                    </div>
+                    <div class="music-item" data-color="#051f38">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/92/9f/69/929f69f1-9977-3a44-d674-11f70c852d1b/24UMGIM36186.rgb.jpg/256x256bb.webp" alt="">
+                            <div class="music-cover-ph" style="--item-color:#051f38">◫</div></div>
+                        <div class="music-info"><div class="music-name">HIT ME HARD AND SOFT</div><div class="music-sub">Billie Eilish · 2024</div></div>
+                        <span class="music-rank">05</span>
+                    </div>
+                </div>
+
+                <!-- TRACKS -->
+                <div class="music-column">
+                    <div class="music-col-header">
+                        <span class="music-col-icon">▶</span>
+                        <span class="music-col-title">Tracks</span>
+                    </div>
+                    <div class="music-item top-pick" data-color="#c7a57a">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#c7a57a">◫</div>
+                        </div>
+                        <div class="music-info">
+                            <div class="music-name">we can't be friends (wait for your love)</div>
+                            <div class="music-sub">Ariana Grande · eternal sunshine</div>
+                        </div>
+                        <span class="music-rank">01</span>
+                    </div>
+                    <div class="music-item" data-color="#c9c9c9">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/12/5d/63/125d6389-2205-c77c-702c-8128e9020bd6/16UMGIM12432.rgb.jpg/256x256bb.webp" alt="">
+                            <div class="music-cover-ph" style="--item-color:#c9c9c9">◫</div>
+                        </div>
+                        <div class="music-info">
+                            <div class="music-name">Into You</div>
+                            <div class="music-sub">Ariana Grande · Dangerous Woman</div>
+                        </div>
+                        <span class="music-rank">02</span>
+                    </div>
+                    <div class="music-item" data-color="#44454a">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f8/11/ef/f811ef3b-8ca4-ac16-ba71-1dca7304a8ba/22UMGIM49145.rgb.jpg/256x256bb.webp" alt="">
+                            <div class="music-cover-ph" style="--item-color:#44454a">◫</div>
+                        </div>
+                        <div class="music-info">
+                            <div class="music-name">I Like You (A Happier Song) [feat. Doja Cat]</div>
+                            <div class="music-sub">Post Malone, Doja Cat · Twelve Carat Toothache (Deluxe)</div>
+                        </div>
+                        <span class="music-rank">03</span>
+                    </div>
+                    <div class="music-item" data-color="#ffffff">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8b/02/52/8b02528c-8282-6709-dbb3-953da86c6e37/196871470124.jpg/256x256bb.jpg" alt="">
+                            <div class="music-cover-ph" style="--item-color:#ffffff">◫</div>
+                        </div>
+                        <div class="music-info">
+                            <div class="music-name">Paint The Town Red</div>
+                            <div class="music-sub">Doja Cat · Scarlet</div>
+                        </div>
+                        <span class="music-rank">04</span>
+                    </div>
+                    <div class="music-item" data-color="#e2bc90">
+                        <div class="music-cover">
+                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c4/7e/22/c47e22bf-0d2b-e211-815c-39c41428c6a4/23UMGIM16392.rgb.jpg/256x256bb.webp" alt="">
+                            <div class="music-cover-ph" style="--item-color:#e2bc90">◫</div>
+                        </div>
+                        <div class="music-info">
+                            <div class="music-name">Feather</div>
+                            <div class="music-sub">Sabrina Carpenter · emails i can’t send fwd:</div>
+                        </div>
+                        <span class="music-rank">05</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════
+             MUSIC PLAYER
+             Set your song file in the <audio> src.
+             Set your artwork in the <img> inside .mp-artwork.
+        ═════════════════════════════════════════════════ -->
+        <section class="reveal">
+            <div class="music-player">
+                <div class="mp-artwork">
+                    <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/300x300bb.webp" alt="Song artwork">
+                    <div class="mp-artwork-ph">♫</div>
+                </div>
+                <div class="mp-body">
+                    <div class="mp-info">
+                        <div class="mp-title">we can't be friends (wait for your love)</div>
+                        <div class="mp-artist">Ariana Grande</div>
+                    </div>
+                    <div class="mp-controls">
+                        <button class="mp-play" id="mp-play" aria-label="Play">▶</button>
+                        <div class="mp-progress-wrap">
+                            <span class="mp-time" id="mp-current">0:00</span>
+                            <input type="range" class="mp-progress" id="mp-progress" min="0" max="100" value="0" aria-label="Seek">
+                            <span class="mp-time" id="mp-duration">0:00</span>
+                        </div>
+                        <div class="mp-volume-wrap">
+                            <input type="range" class="mp-volume" id="mp-volume" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
+                        </div>
+                    </div>
+                    <audio id="mp-audio" src="/audio/we-can't-be-friends-(wait-for-your-love)-Ariana-Grande.mp3" preload="metadata"></audio>
+                </div>
+            </div>
+        </section>
 
     </div>
 
@@ -990,6 +978,15 @@
         const mpCurrent  = document.getElementById('mp-current');
         const mpDuration = document.getElementById('mp-duration');
         const mpArtwork  = document.querySelector('.mp-artwork');
+
+        function updateRangeFill(el) {
+            const min = el.min ? parseFloat(el.min) : 0;
+            const max = el.max ? parseFloat(el.max) : 100;
+            const val = parseFloat(el.value);
+            const pct = ((val - min) / (max - min)) * 100;
+            el.style.setProperty('--fill', pct + '%');
+        }
+
         if (mpAudio && mpPlay && mpVol && mpProgress && mpCurrent && mpDuration) {
             mpPlay.addEventListener('click', () => {
                 if (mpAudio.paused) {
@@ -1014,6 +1011,7 @@
                     const pct = (mpAudio.currentTime / mpAudio.duration) * 100;
                     mpProgress.value = pct;
                     mpCurrent.textContent = formatTime(mpAudio.currentTime);
+                    updateRangeFill(mpProgress);
                 }
             });
             mpAudio.addEventListener('loadedmetadata', () => {
@@ -1022,17 +1020,22 @@
             mpVol.addEventListener('input', () => {
                 mpAudio.volume = mpVol.value;
                 mpAudio.muted = false;
+                updateRangeFill(mpVol);
             });
             mpVol.addEventListener('change', () => {
                 mpAudio.volume = mpVol.value;
                 mpAudio.muted = false;
+                updateRangeFill(mpVol);
             });
             mpProgress.addEventListener('input', () => {
                 if (mpAudio.duration) {
                     mpAudio.currentTime = (mpProgress.value / 100) * mpAudio.duration;
                 }
+                updateRangeFill(mpProgress);
             });
             mpAudio.volume = mpVol.value;
+            updateRangeFill(mpVol);
+            updateRangeFill(mpProgress);
         }
         function formatTime(s) {
             if (isNaN(s)) return '0:00';
