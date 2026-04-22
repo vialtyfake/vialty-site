@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg:      #222222;
+            --bg:      #0c0c0c;
             --surface: #141414;
             --sur2:    #1c1c1c;
             --border:  rgba(255,255,255,0.08);
@@ -19,8 +19,10 @@
             --muted:   #5a5a5a;
             --muted2:  #888;
             --accent:  #e0e0e0;
-            --duo-a:   #22d3ee;
-            --duo-b:   #ff3838;
+            --duo-a:   #ffffff;
+            --duo-b:   #ffffff;
+            --accent-2:#22d3ee;
+            --accent-3:#ff3838;
         }
 
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -55,7 +57,7 @@
             letter-spacing:0.06em; color:var(--text); text-decoration:none;
             transition: color .15s;
         }
-        .logo:hover { color: var(--duo-a); }
+        .logo:hover { color: var(--accent-3); }
         .logo em { color:var(--duo-a); font-style:normal; }
         .nav-links { list-style:none; display:flex; gap:0.2rem; }
         .nav-links a {
@@ -187,13 +189,13 @@
         }
         .current-dot {
             width: 7px; height: 7px; border-radius: 50%;
-            background: var(--duo-a); flex-shrink: 0;
-            box-shadow: 0 0 6px var(--duo-a);
+            background: var(--accent-2); flex-shrink: 0;
+            box-shadow: 0 0 6px var(--accent-2);
             animation: dot-pulse 2.5s ease-in-out infinite;
         }
         @keyframes dot-pulse {
-            0%,100% { box-shadow: 0 0 5px var(--duo-a); opacity: 1; }
-            50%      { box-shadow: 0 0 10px var(--duo-a), 0 0 20px color-mix(in srgb,var(--duo-a) 40%,transparent); opacity: .85; }
+            0%,100% { box-shadow: 0 0 5px var(--accent-2); opacity: 1; }
+            50%      { box-shadow: 0 0 10px var(--accent-2), 0 0 20px color-mix(in srgb,var(--duo-a) 40%,transparent); opacity: .85; }
         }
         .current-label { font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted2); flex-shrink: 0; }
         .current-name  { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .88rem; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -265,7 +267,7 @@
             font-size:.63rem; letter-spacing:.08em;
             padding:.28rem .7rem; border-radius:999px;
             background:rgba(34,211,238,.06); border:1px solid rgba(34,211,238,.18);
-            color:var(--duo-a);
+            color:var(--accent-2);
             transition: background .18s, border-color .18s, transform .18s;
             cursor: default;
         }
@@ -371,23 +373,22 @@
                 <div class="links-grid">
 
                     <a href="https://github.com/vialtyfake" target="_blank" rel="noopener" class="link-item">
-                        <img src="https://github.githubassets.com/favicons/favicon.svg" alt="GitHub" width="20" height="20">
+                        <img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub" width="20" height="20">
                         GitHub
                     </a>
                     
                     <a href="https://www.roblox.com/users/441067435/profile" target="_blank" rel="noopener" class="link-item">
-                        <img src="https://www.roblox.com/favicon.ico" alt="Roblox" width="20" height="20">
+                        <img src="https://cdn.simpleicons.org/roblox/ffffff" alt="Roblox" width="20" height="20">
                         Roblox
                     </a>
                     
                     <a href="https://discord.gg/qvqrHgE66K" class="link-item">
-                        <img src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0b5061df29d55a92d945_full_logo_blurple_RGB.svg"
-                            alt="Discord" width="20" height="20">
+                        <img src="https://cdn.simpleicons.org/discord/ffffff" alt="Discord" width="20" height="20">
                         Discord
                     </a>
                     
                     <a href="https://x.com/vialtyfake" class="link-item">
-                        <img src="https://abs.twimg.com/favicons/twitter.2.ico" alt="Twitter / X" width="20" height="20">
+                        <img src="https://cdn.simpleicons.org/x/ffffff" alt="X" width="20" height="20">
                         Twitter
                     </a>
 
