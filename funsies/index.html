@@ -434,18 +434,53 @@
             .mp-controls {
                 flex-wrap:wrap;
                 justify-content:center;
+                flex-direction:column;
+                gap:.6rem;
             }
             .mp-progress-wrap {
-                order:3;
+                order:2;
                 width:100%;
-                margin-top:.4rem;
+            }
+            .mp-play {
+                order:1;
             }
             .mp-volume {
+                order:3;
                 width:100%;
                 height:6px;
-                margin-top:.3rem;
+                margin-top:.2rem;
             }
             .mp-time { min-width:2.5rem; font-size:.55rem; }
+            .mp-progress, .mp-volume {
+                touch-action: manipulation;
+                -webkit-appearance: none;
+                appearance: none;
+                height:6px;
+                border-radius:3px;
+                background:var(--sur2);
+                outline:none;
+                cursor:pointer;
+            }
+            .mp-progress::-webkit-slider-thumb,
+            .mp-volume::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width:14px;
+                height:14px;
+                border-radius:50%;
+                background:var(--duo-a);
+                cursor:pointer;
+                border:none;
+            }
+            .mp-progress::-moz-range-thumb,
+            .mp-volume::-moz-range-thumb {
+                width:14px;
+                height:14px;
+                border-radius:50%;
+                background:var(--duo-a);
+                cursor:pointer;
+                border:none;
+            }
         }
     </style>
 </head>
