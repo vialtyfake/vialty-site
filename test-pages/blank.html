@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/images/main/logosvg64.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIALTY — WIP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #0c0c0c;
+            --surface: #141414;
+            --sur2:    #1c1c1c;
+            --border:  rgba(255,255,255,0.08);
+            --brd2:    rgba(255,255,255,0.13);
+            --text:    #f0f0f0;
+            --muted:   #5a5a5a;
+            --muted2:  #888;
+            --accent:  #e0e0e0;
+            --duo-a:   #ffffff;
+            --duo-b:   #ffffff;
+            --accent-2:#22d3ee;
+            --accent-3:#ff3838;
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg); color: var(--text);
+            font-family: 'Space Mono', monospace;
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        .grid {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 25%, black 100%);
+            -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 25%, black 100%);
+        }
+
+        nav {
+            position: fixed; top:0; left:0; right:0; z-index:200;
+            height: 60px; display: flex; align-items: center;
+            justify-content: space-between; padding: 0 2.5rem;
+            background: rgba(12,12,12,0.88);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+            will-change: transform; transform: translateZ(0);
+        }
+        .logo {
+            font-family:'Syne',sans-serif; font-weight:800; font-size:1rem;
+            letter-spacing:0.06em; color:var(--text); text-decoration:none;
+            transition: color .15s;
+        }
+        .logo:hover { color: var(--accent-3); }
+        .logo em { color:var(--duo-a); font-style:normal; }
+        .nav-links { list-style:none; display:flex; gap:0.2rem; }
+        .nav-links a {
+            display:block; color:var(--muted2); text-decoration:none;
+            font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase;
+            padding:0.4rem 0.9rem; border-radius:5px; border:1px solid transparent;
+            transition: color .15s, background .15s, border-color .15s, transform .15s;
+        }
+        .nav-links a:hover { color:var(--text); background:var(--sur2); border-color:var(--border); transform: translateY(-1px); }
+        .nav-links a:active { transform: translateY(0) scale(.97); }
+        .nav-links a.active { color:var(--duo-a); }
+
+        /* ── CENTRE STAGE ─── */
+        .stage {
+            position: relative; z-index: 1;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .wip-panel {
+            max-width: 480px; width: 100%;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 14px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 20px 60px rgba(0,0,0,.45);
+            opacity: 0; animation: up .7s ease forwards .3s;
+        }
+        .wip-panel::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:1px;
+            background:linear-gradient(90deg, transparent, var(--duo-a) 40%, var(--duo-b) 60%, transparent);
+            opacity:.45;
+        }
+        .wip-inner {
+            padding: 2.8rem 2.5rem;
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; gap: 1.2rem;
+        }
+
+        .wip-label {
+            font-size:.63rem; letter-spacing:.25em; text-transform:uppercase;
+            color:var(--duo-a);
+        }
+
+        .wip-icon {
+            width: 42px; height: 42px; opacity: .22;
+            animation: spulse 2.8s ease-in-out infinite;
+        }
+
+        .wip-text {
+            font-size: .88rem; color: var(--muted2);
+            line-height: 1.8; letter-spacing: .02em;
+        }
+        .wip-text strong { color: var(--accent); font-weight: 400; }
+
+        .wip-back {
+            font-family:'Space Mono',monospace; font-size:0.7rem;
+            letter-spacing:0.1em; text-transform:uppercase;
+            padding:0.6rem 1.4rem; border-radius:6px;
+            text-decoration:none; border:1px solid var(--brd2);
+            color: var(--muted2); background: transparent;
+            transition: color .18s, background .18s, border-color .18s, transform .18s;
+            margin-top: .4rem;
+        }
+        .wip-back:hover  { color:var(--text); background:var(--sur2); transform: translateY(-2px); }
+        .wip-back:active { transform: translateY(0) scale(.96); }
+
+        @keyframes up    { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes spulse { 0%,100%{opacity:.18} 50%{opacity:.38} }
+
+        @media(max-width:600px){
+            nav { padding: 0 1.2rem; }
+            .wip-inner { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid"></div>
+
+    <nav>
+        <a href="/index.html" class="logo">V<em>.</em></a>
+        <ul class="nav-links">
+            <li><a href="/projects">Projects</a></li>
+            <li><a href="/funsies" class="active">Funsies [WIP]</a></li>
+        </ul>
+    </nav>
+
+    <div class="stage">
+        <div class="wip-panel">
+            <div class="wip-inner">
+                <p class="wip-label">// coming soon</p>
+
+                <!-- simple clock/tools icon -->
+                <svg class="wip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                </svg>
+
+                <p class="wip-text">
+                    This page is <strong>WIP</strong>.<br>Come back later.
+                </p>
+
+                <a href="/index.html" class="wip-back">← Go home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
