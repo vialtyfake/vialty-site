@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" sizes="64x64" href="/images/favicon.png">
+    <link rel="icon" type="image/png" href="/images/main/logosvg64.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Funsies — VIALTY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -132,10 +132,11 @@
         .music-item {
             --item-color: var(--duo-a);
             display:flex; align-items:center; gap:.75rem;
-            padding:.7rem 1rem;
+            padding:.9rem 1rem;
             border-bottom:1px solid rgba(255,255,255,.04);
             transition:background .18s, transform .18s;
             cursor:default; position:relative;
+            -webkit-tap-highlight-color: transparent;
         }
         .music-item:last-child { border-bottom:none; }
         .music-item::before { content:''; position:absolute; left:0; top:20%; bottom:20%; width:2px; border-radius:2px; background:var(--item-color); opacity:0; transform:scaleY(.4); transition:opacity .2s, transform .2s; }
@@ -169,8 +170,16 @@
         .mp-artwork {
             width:80px; height:80px; border-radius:8px; background:var(--sur2);
             flex-shrink:0; overflow:hidden; position:relative;
+            transition:transform .3s ease, box-shadow .3s ease;
         }
         .mp-artwork img { width:100%; height:100%; object-fit:cover; display:block; }
+        .mp-artwork.playing {
+            animation: cover-pulse 3s ease-in-out infinite;
+        }
+        @keyframes cover-pulse {
+            0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+            50% { transform: scale(1.03); box-shadow: 0 0 14px 4px rgba(78, 65, 48, 0.25); }
+        }
         .mp-artwork-ph {
             width:100%; height:100%; display:flex; align-items:center; justify-content:center;
             font-size:1.2rem; color:var(--muted); background:var(--sur2);
@@ -180,13 +189,23 @@
         .mp-artist { font-size:.72rem; color:var(--muted2); }
         .mp-controls { display:flex; align-items:center; gap:.8rem; }
         .mp-play {
-            width:36px; height:36px; border-radius:50%; border:1px solid var(--border);
-            background:var(--sur2); color:var(--text); font-size:.8rem; cursor:pointer;
+            width:44px; height:44px; border-radius:50%; border:1px solid var(--border);
+            background:var(--sur2); color:var(--text); font-size:.9rem; cursor:pointer;
             display:flex; align-items:center; justify-content:center;
-            transition:background .15s, border-color .15s, transform .15s; flex-shrink:0;
+            transition:background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease; flex-shrink:0;
+        }
+        @media(max-width:500px){
+            .mp-play {
+                width:50px; height:50px;
+                font-size:1rem;
+            }
         }
         .mp-play:hover { background:var(--duo-a); color:var(--bg); border-color:var(--duo-a); }
         .mp-play:active { transform:scale(.95); }
+        .mp-play.playing {
+            background:var(--accent-2); border-color:var(--accent-2); color:var(--bg);
+            box-shadow: 0 0 14px rgba(34,211,238,0.4);
+        }
         .mp-progress-wrap { flex:1; display:flex; align-items:center; gap:.6rem; }
         .mp-time { font-size:.58rem; color:var(--muted); min-width:3.2rem; text-align:center; font-variant-numeric:tabular-nums; }
         .mp-progress {
@@ -251,10 +270,11 @@
         .game-row {
             --row-color: var(--duo-a);
             display:flex; align-items:center; gap:.85rem;
-            padding:.75rem 1rem;
+            padding:1rem 1.1rem;
             border-bottom:1px solid rgba(255,255,255,.04);
             text-decoration:none; color:inherit;
             transition:background .18s, transform .18s; position:relative;
+            -webkit-tap-highlight-color: transparent;
         }
         .game-row:last-child { border-bottom:none; }
         .game-row::before { content:''; position:absolute; left:0; top:25%; bottom:25%; width:2px; border-radius:2px; background:var(--row-color); opacity:0; transform:scaleY(.4); transition:opacity .2s, transform .2s; }
@@ -393,6 +413,39 @@
             nav { padding:0 1.2rem; }
             .content, .footnote { padding-left:1.2rem; padding-right:1.2rem; }
                 .page-header { padding:7.5rem 1.2rem 2.5rem; }
+        }
+
+        @media(max-width:500px){
+            .music-player {
+                flex-direction:column;
+                align-items:center;
+                text-align:center;
+                gap:1rem;
+                padding:1.2rem;
+            }
+            .mp-artwork {
+                width:100px;
+                height:100px;
+            }
+            .mp-body {
+                width:100%;
+                gap:.4rem;
+            }
+            .mp-controls {
+                flex-wrap:wrap;
+                justify-content:center;
+            }
+            .mp-progress-wrap {
+                order:3;
+                width:100%;
+                margin-top:.4rem;
+            }
+            .mp-volume {
+                width:100%;
+                height:6px;
+                margin-top:.3rem;
+            }
+            .mp-time { min-width:2.5rem; font-size:.55rem; }
         }
     </style>
 </head>
@@ -916,17 +969,26 @@
         const mpProgress = document.getElementById('mp-progress');
         const mpCurrent  = document.getElementById('mp-current');
         const mpDuration = document.getElementById('mp-duration');
+        const mpArtwork  = document.querySelector('.mp-artwork');
         if (mpAudio && mpPlay && mpVol && mpProgress && mpCurrent && mpDuration) {
             mpPlay.addEventListener('click', () => {
                 if (mpAudio.paused) {
                     mpAudio.play().catch(() => {});
                     mpPlay.textContent = '❚❚';
+                    mpPlay.classList.add('playing');
+                    mpArtwork.classList.add('playing');
                 } else {
                     mpAudio.pause();
                     mpPlay.textContent = '▶';
+                    mpPlay.classList.remove('playing');
+                    mpArtwork.classList.remove('playing');
                 }
             });
-            mpAudio.addEventListener('ended', () => { mpPlay.textContent = '▶'; });
+            mpAudio.addEventListener('ended', () => {
+                mpPlay.textContent = '▶';
+                mpPlay.classList.remove('playing');
+                mpArtwork.classList.remove('playing');
+            });
             mpAudio.addEventListener('timeupdate', () => {
                 if (mpAudio.duration) {
                     const pct = (mpAudio.currentTime / mpAudio.duration) * 100;

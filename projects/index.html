@@ -9,9 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
-        /* ══════════════════════════════════════════════════════
-           TOKENS — same as index.html
-           ══════════════════════════════════════════════════════ */
         :root {
             --bg:      #0c0c0c;
             --surface: #141414;
@@ -139,6 +136,7 @@
                         border-color .28s ease,
                         box-shadow .28s ease;
             opacity:0; transform:translateY(24px);
+            -webkit-tap-highlight-color: transparent;
         }
         .project-card.visible {
             animation: card-in .5s cubic-bezier(.22,1,.36,1) forwards;
@@ -430,6 +428,13 @@
             .page-header{padding:7.5rem 1.2rem 2.5rem}
             .projects{padding:0 1.2rem 5rem}
             .modal-content{padding:1.4rem 1.4rem 1.6rem}
+            .carousel-btn{width:42px;height:42px}
+        }
+        @media(max-width:500px){
+            .modal-backdrop{padding:.8rem}
+            .modal{max-height:85vh}
+            .modal-actions{gap:.5rem}
+            .modal-link{padding:.55rem 1rem;font-size:.65rem}
         }
     </style>
 </head>
