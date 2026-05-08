@@ -282,6 +282,69 @@
         @keyframes up   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes fade { from{opacity:0} to{opacity:1} }
 
+        /* ── SPOTIFY PANEL ──────────────────────────────────── */
+        .spotify-row {
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .spotify-art {
+            width: 52px; height: 52px; border-radius: 6px;
+            object-fit: cover; flex-shrink: 0;
+            border: 1px solid var(--border);
+            transition: opacity .3s;
+        }
+        .spotify-art-placeholder {
+            width: 52px; height: 52px; border-radius: 6px; flex-shrink: 0;
+            background: var(--sur2); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            opacity: .45;
+        }
+        .spotify-art-placeholder svg { width: 22px; height: 22px; }
+        .spotify-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .28rem; }
+        .spotify-state {
+            font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+            color: var(--muted); display: flex; align-items: center; gap: .45rem;
+        }
+        .spotify-dot {
+            width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+            background: #1db954;
+            box-shadow: 0 0 6px #1db954;
+            animation: spot-pulse 2s ease-in-out infinite;
+        }
+        .spotify-dot.idle { background: var(--muted); box-shadow: none; animation: none; }
+        @keyframes spot-pulse {
+            0%,100% { box-shadow: 0 0 5px #1db954; opacity: 1; }
+            50%      { box-shadow: 0 0 12px #1db954, 0 0 24px rgba(29,185,84,.3); opacity: .8; }
+        }
+        .spotify-title {
+            font-family: 'Syne', sans-serif; font-weight: 700;
+            font-size: .9rem; color: var(--text);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .spotify-title a {
+            color: inherit; text-decoration: none;
+            transition: color .15s;
+        }
+        .spotify-title a:hover { color: #1db954; }
+        .spotify-artist {
+            font-size: .72rem; color: var(--muted2);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .spotify-badge {
+            flex-shrink: 0; display: flex; align-items: center;
+        }
+        .spotify-badge img { width: 20px; height: 20px; opacity: .45; transition: opacity .15s; }
+        .spotify-badge:hover img { opacity: .8; }
+        .spotify-bar-wrap {
+            margin-top: .9rem;
+            height: 2px; border-radius: 999px;
+            background: var(--sur2); overflow: hidden;
+        }
+        .spotify-bar {
+            height: 100%; border-radius: 999px;
+            background: linear-gradient(90deg, #1db954, #1ed760);
+            width: 0%; transition: width .8s linear;
+        }
+
         /* scroll reveal */
         .reveal {
             opacity: 0; transform: translateY(22px);
@@ -343,6 +406,41 @@
             </div>
         </div>
 
+        <!-- CURRENTLY LISTENING -->
+        <div class="panel reveal" id="spotify-panel">
+            <div class="panel-inner">
+                <p class="panel-label">// currently listening to</p>
+                <div class="spotify-row">
+                    <!-- Album art: shown when a track is playing -->
+                    <a id="sp-art-link" href="#" target="_blank" rel="noopener" style="display:none;flex-shrink:0;">
+                        <img id="sp-art" class="spotify-art" src="" alt="Album art">
+                    </a>
+                    <!-- Placeholder icon shown when nothing is playing -->
+                    <div id="sp-placeholder" class="spotify-art-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+                            <line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/>
+                        </svg>
+                    </div>
+                    <div class="spotify-info">
+                        <span class="spotify-state">
+                            <span id="sp-dot" class="spotify-dot idle"></span>
+                            <span id="sp-state-text">Loading…</span>
+                        </span>
+                        <div id="sp-title" class="spotify-title" style="opacity:0">—</div>
+                        <div id="sp-artist" class="spotify-artist" style="opacity:0">—</div>
+                    </div>
+                    <a class="spotify-badge" href="https://open.spotify.com" target="_blank" rel="noopener" title="Open Spotify">
+                        <img src="https://cdn.simpleicons.org/spotify/ffffff" alt="Spotify">
+                    </a>
+                </div>
+                <!-- Progress bar: only visible while something is playing -->
+                <div id="sp-bar-wrap" class="spotify-bar-wrap" style="display:none">
+                    <div id="sp-bar" class="spotify-bar"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- LINKS -->
         <div class="panel reveal">
             <div class="panel-inner">
@@ -371,6 +469,7 @@
     </div>
 
     <script>
+        // ── Scroll reveal ────────────────────────────────────────────────────
         const revealEls = document.querySelectorAll('.reveal');
         const obs = new IntersectionObserver(entries => {
             entries.forEach(e => {
@@ -381,6 +480,74 @@
             });
         }, { threshold: 0.08 });
         revealEls.forEach(el => obs.observe(el));
+
+        // ── Spotify "Currently Listening" ────────────────────────────────────
+        // We poll our own Vercel serverless function (/api/spotify) every 30s.
+        // That function keeps our credentials safe on the server side.
+
+        const spDot        = document.getElementById('sp-dot');
+        const spStateText  = document.getElementById('sp-state-text');
+        const spTitle      = document.getElementById('sp-title');
+        const spArtist     = document.getElementById('sp-artist');
+        const spArt        = document.getElementById('sp-art');
+        const spArtLink    = document.getElementById('sp-art-link');
+        const spPlaceholder= document.getElementById('sp-placeholder');
+        const spBarWrap    = document.getElementById('sp-bar-wrap');
+        const spBar        = document.getElementById('sp-bar');
+
+        function renderPlaying(data) {
+            // Show album art, hide placeholder
+            spArt.src          = data.albumArt;
+            spArtLink.href     = data.songUrl;
+            spArtLink.style.display  = 'block';
+            spPlaceholder.style.display = 'none';
+
+            // Track info
+            spTitle.innerHTML  = `<a href="${data.songUrl}" target="_blank" rel="noopener">${data.title}</a>`;
+            spArtist.textContent = data.artist;
+            spTitle.style.opacity = spArtist.style.opacity = '1';
+
+            // Pulsing green dot + label
+            spDot.classList.remove('idle');
+            spStateText.textContent = 'Now playing';
+
+            // Progress bar
+            if (data.duration > 0) {
+                const pct = (data.progress / data.duration) * 100;
+                spBarWrap.style.display = 'block';
+                // Small delay lets the CSS transition animate from the previous value
+                requestAnimationFrame(() => { spBar.style.width = pct + '%'; });
+            }
+        }
+
+        function renderIdle() {
+            spArtLink.style.display    = 'none';
+            spPlaceholder.style.display = 'flex';
+            spTitle.textContent  = 'Not playing anything right now';
+            spArtist.textContent = '';
+            spTitle.style.opacity = '1';
+            spArtist.style.opacity = '0';
+            spDot.classList.add('idle');
+            spStateText.textContent = 'Offline';
+            spBarWrap.style.display = 'none';
+            spBar.style.width = '0%';
+        }
+
+        async function fetchSpotify() {
+            try {
+                const res  = await fetch('/api/spotify');
+                const data = await res.json();
+                data.isPlaying ? renderPlaying(data) : renderIdle();
+            } catch (err) {
+                // Network error — silently show idle state so the page still looks fine
+                renderIdle();
+                spStateText.textContent = 'Unavailable';
+            }
+        }
+
+        // Kick off immediately, then refresh every 30 seconds
+        fetchSpotify();
+        setInterval(fetchSpotify, 30_000);
     </script>
 </body>
 </html>
