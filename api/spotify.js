@@ -1,14 +1,5 @@
-/**
- * api/spotify.js — Vercel Serverless Function
- *
- * Place this file at the root of your project in a folder called "api/".
- * Vercel will automatically expose it at: https://yoursite.vercel.app/api/spotify
- *
- * Required environment variables (set in Vercel Dashboard → Settings → Environment Variables):
- *   SPOTIFY_CLIENT_ID      — from your Spotify app at developer.spotify.com
- *   SPOTIFY_CLIENT_SECRET  — same place
- *   SPOTIFY_REFRESH_TOKEN  — the refresh token from your OAuth flow
- */
+// api/spotify.js — Vercel Serverless Function
+
 
 export default async function handler(req, res) {
   // Allow your own front-end to call this endpoint

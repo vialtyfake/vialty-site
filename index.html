@@ -482,9 +482,6 @@
         revealEls.forEach(el => obs.observe(el));
 
         // ── Spotify "Currently Listening" ────────────────────────────────────
-        // We poll our own Vercel serverless function (/api/spotify) every 10s.
-        // That function keeps our credentials safe on the server side.
-
         const spDot        = document.getElementById('sp-dot');
         const spStateText  = document.getElementById('sp-state-text');
         const spTitle      = document.getElementById('sp-title');
@@ -571,8 +568,6 @@
             }
         }
 
-        // Kick off immediately, then refresh every 10 seconds
-        // (faster than 30s so you see updates more frequently)
         console.log('[Spotify] Initializing...');
         fetchSpotify();
         setInterval(fetchSpotify, 10_000);
