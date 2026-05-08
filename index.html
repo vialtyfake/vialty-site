@@ -306,14 +306,14 @@
         }
         .spotify-dot {
             width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-            background: #1db954;
-            box-shadow: 0 0 6px #1db954;
+            background: #d51007;
+            box-shadow: 0 0 6px #d51007;
             animation: spot-pulse 2s ease-in-out infinite;
         }
         .spotify-dot.idle { background: var(--muted); box-shadow: none; animation: none; }
         @keyframes spot-pulse {
-            0%,100% { box-shadow: 0 0 5px #1db954; opacity: 1; }
-            50%      { box-shadow: 0 0 12px #1db954, 0 0 24px rgba(29,185,84,.3); opacity: .8; }
+            0%,100% { box-shadow: 0 0 5px #d51007; opacity: 1; }
+            50%      { box-shadow: 0 0 12px #d51007, 0 0 24px rgba(213,16,7,.3); opacity: .8; }
         }
         .spotify-title {
             font-family: 'Syne', sans-serif; font-weight: 700;
@@ -324,7 +324,7 @@
             color: inherit; text-decoration: none;
             transition: color .15s;
         }
-        .spotify-title a:hover { color: #1db954; }
+        .spotify-title a:hover { color: #d51007; }
         .spotify-artist {
             font-size: .72rem; color: var(--muted2);
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -341,7 +341,7 @@
         }
         .spotify-bar {
             height: 100%; border-radius: 999px;
-            background: linear-gradient(90deg, #1db954, #1ed760);
+            background: linear-gradient(90deg, #d51007, #ff3a2e);
             width: 0%; transition: width .8s linear;
         }
 
@@ -430,8 +430,8 @@
                         <div id="sp-title" class="spotify-title" style="opacity:0">—</div>
                         <div id="sp-artist" class="spotify-artist" style="opacity:0">—</div>
                     </div>
-                    <a class="spotify-badge" href="https://open.spotify.com" target="_blank" rel="noopener" title="Open Spotify">
-                        <img src="https://cdn.simpleicons.org/spotify/ffffff" alt="Spotify">
+                    <a class="spotify-badge" href="https://www.last.fm" target="_blank" rel="noopener" title="Open Last.fm">
+                        <img src="https://cdn.simpleicons.org/lastdotfm/ffffff" alt="Last.fm">
                     </a>
                 </div>
                 <!-- Progress bar: only visible while something is playing -->
@@ -481,7 +481,11 @@
         }, { threshold: 0.08 });
         revealEls.forEach(el => obs.observe(el));
 
-        // ── Spotify "Currently Listening" ────────────────────────────────────
+        // ── Last.fm "Currently Listening" ────────────────────────────────────
+        // Last.fm scrobbles what you play in Apple Music in real time, so
+        // /api/lastfm checks if the most recent scrobble has the "nowplaying"
+        // flag set. Unlike the Spotify API, Last.fm doesn't expose playback
+        // progress, so we skip the progress bar entirely.
         const spDot        = document.getElementById('sp-dot');
         const spStateText  = document.getElementById('sp-state-text');
         const spTitle      = document.getElementById('sp-title');
@@ -490,87 +494,82 @@
         const spArtLink    = document.getElementById('sp-art-link');
         const spPlaceholder= document.getElementById('sp-placeholder');
         const spBarWrap    = document.getElementById('sp-bar-wrap');
-        const spBar        = document.getElementById('sp-bar');
-
-        // Helper: format milliseconds as M:SS or MM:SS
-        function formatTime(ms) {
-            const totalSecs = Math.floor(ms / 1000);
-            const mins = Math.floor(totalSecs / 60);
-            const secs = totalSecs % 60;
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
-        }
 
         function renderPlaying(data) {
-            // Show album art, hide placeholder
-            spArt.src          = data.albumArt;
-            spArtLink.href     = data.songUrl;
-            spArtLink.style.display  = 'block';
-            spPlaceholder.style.display = 'none';
+            // Show album art if Last.fm has it, otherwise keep the placeholder.
+            // Last.fm sometimes lacks art for obscure releases.
+            if (data.albumArt) {
+                spArt.src                   = data.albumArt;
+                spArtLink.href              = data.songUrl ?? '#';
+                spArtLink.style.display     = 'block';
+                spPlaceholder.style.display = 'none';
+            } else {
+                spArtLink.style.display     = 'none';
+                spPlaceholder.style.display = 'flex';
+            }
 
-            // Track info with time display
-            spTitle.innerHTML  = `<a href="${data.songUrl}" target="_blank" rel="noopener">${data.title}</a>`;
-            spArtist.textContent = `${data.artist} · ${formatTime(data.progress)} / ${formatTime(data.duration)}`;
+            // Track title links to the Last.fm page for the track.
+            spTitle.innerHTML    = data.songUrl
+                ? `<a href="${data.songUrl}" target="_blank" rel="noopener">${data.title}</a>`
+                : data.title;
+            spArtist.textContent = data.artist;
             spTitle.style.opacity = spArtist.style.opacity = '1';
 
-            // Pulsing green dot + label
+            // Pulsing dot + label
             spDot.classList.remove('idle');
             spStateText.textContent = 'Now playing';
 
-            // Progress bar
-            if (data.duration > 0) {
-                const pct = (data.progress / data.duration) * 100;
-                spBarWrap.style.display = 'block';
-                // Small delay lets the CSS transition animate from the previous value
-                requestAnimationFrame(() => { spBar.style.width = pct + '%'; });
-            }
+            // Last.fm has no playback position data, so the bar stays hidden.
+            spBarWrap.style.display = 'none';
 
-            console.log(`[Spotify] Playing: ${data.title} by ${data.artist} (${formatTime(data.progress)}/${formatTime(data.duration)})`);
+            console.log(`[Last.fm] Playing: ${data.title} by ${data.artist}`);
         }
 
         function renderIdle() {
-            spArtLink.style.display    = 'none';
+            spArtLink.style.display     = 'none';
             spPlaceholder.style.display = 'flex';
-            spTitle.textContent  = 'Not playing anything right now';
-            spArtist.textContent = '';
-            spTitle.style.opacity = '1';
-            spArtist.style.opacity = '0';
+            spTitle.textContent         = 'Not playing anything right now';
+            spArtist.textContent        = '';
+            spTitle.style.opacity       = '1';
+            spArtist.style.opacity      = '0';
             spDot.classList.add('idle');
-            spStateText.textContent = 'Offline';
-            spBarWrap.style.display = 'none';
-            spBar.style.width = '0%';
+            spStateText.textContent     = 'Offline';
+            spBarWrap.style.display     = 'none';
 
-            console.log('[Spotify] Not playing');
+            console.log('[Last.fm] Not playing');
         }
 
-        async function fetchSpotify() {
+        async function fetchLastFm() {
             try {
-                console.log('[Spotify] Fetching from /api/spotify...');
-                const res  = await fetch('/api/spotify');
-                
+                console.log('[Last.fm] Fetching from /api/lastfm...');
+                const res = await fetch('/api/lastfm');
+
                 if (!res.ok) {
-                    console.error(`[Spotify] API returned status ${res.status}`);
+                    console.error(`[Last.fm] API returned status ${res.status}`);
                     renderIdle();
                     spStateText.textContent = 'Error';
                     return;
                 }
 
                 const data = await res.json();
-                
+
                 if (data.isPlaying) {
                     renderPlaying(data);
                 } else {
                     renderIdle();
                 }
             } catch (err) {
-                console.error('[Spotify] Fetch error:', err);
+                console.error('[Last.fm] Fetch error:', err);
                 renderIdle();
                 spStateText.textContent = 'Unavailable';
             }
         }
 
-        console.log('[Spotify] Initializing...');
-        fetchSpotify();
-        setInterval(fetchSpotify, 10_000);
+        console.log('[Last.fm] Initializing...');
+        fetchLastFm();
+        // Poll every 10 seconds — Last.fm scrobbles update on track change,
+        // so this gives a snappy "now playing" transition.
+        setInterval(fetchLastFm, 10_000);
     </script>
 </body>
 </html>
