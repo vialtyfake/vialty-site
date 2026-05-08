@@ -482,7 +482,7 @@
         revealEls.forEach(el => obs.observe(el));
 
         // ── Spotify "Currently Listening" ────────────────────────────────────
-        // We poll our own Vercel serverless function (/api/spotify) every 30s.
+        // We poll our own Vercel serverless function (/api/spotify) every 10s.
         // That function keeps our credentials safe on the server side.
 
         const spDot        = document.getElementById('sp-dot');
@@ -495,6 +495,14 @@
         const spBarWrap    = document.getElementById('sp-bar-wrap');
         const spBar        = document.getElementById('sp-bar');
 
+        // Helper: format milliseconds as M:SS or MM:SS
+        function formatTime(ms) {
+            const totalSecs = Math.floor(ms / 1000);
+            const mins = Math.floor(totalSecs / 60);
+            const secs = totalSecs % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
         function renderPlaying(data) {
             // Show album art, hide placeholder
             spArt.src          = data.albumArt;
@@ -502,9 +510,9 @@
             spArtLink.style.display  = 'block';
             spPlaceholder.style.display = 'none';
 
-            // Track info
+            // Track info with time display
             spTitle.innerHTML  = `<a href="${data.songUrl}" target="_blank" rel="noopener">${data.title}</a>`;
-            spArtist.textContent = data.artist;
+            spArtist.textContent = `${data.artist} · ${formatTime(data.progress)} / ${formatTime(data.duration)}`;
             spTitle.style.opacity = spArtist.style.opacity = '1';
 
             // Pulsing green dot + label
@@ -518,6 +526,8 @@
                 // Small delay lets the CSS transition animate from the previous value
                 requestAnimationFrame(() => { spBar.style.width = pct + '%'; });
             }
+
+            console.log(`[Spotify] Playing: ${data.title} by ${data.artist} (${formatTime(data.progress)}/${formatTime(data.duration)})`);
         }
 
         function renderIdle() {
@@ -531,23 +541,41 @@
             spStateText.textContent = 'Offline';
             spBarWrap.style.display = 'none';
             spBar.style.width = '0%';
+
+            console.log('[Spotify] Not playing');
         }
 
         async function fetchSpotify() {
             try {
+                console.log('[Spotify] Fetching from /api/spotify...');
                 const res  = await fetch('/api/spotify');
+                
+                if (!res.ok) {
+                    console.error(`[Spotify] API returned status ${res.status}`);
+                    renderIdle();
+                    spStateText.textContent = 'Error';
+                    return;
+                }
+
                 const data = await res.json();
-                data.isPlaying ? renderPlaying(data) : renderIdle();
+                
+                if (data.isPlaying) {
+                    renderPlaying(data);
+                } else {
+                    renderIdle();
+                }
             } catch (err) {
-                // Network error — silently show idle state so the page still looks fine
+                console.error('[Spotify] Fetch error:', err);
                 renderIdle();
                 spStateText.textContent = 'Unavailable';
             }
         }
 
-        // Kick off immediately, then refresh every 30 seconds
+        // Kick off immediately, then refresh every 10 seconds
+        // (faster than 30s so you see updates more frequently)
+        console.log('[Spotify] Initializing...');
         fetchSpotify();
-        setInterval(fetchSpotify, 30_000);
+        setInterval(fetchSpotify, 10_000);
     </script>
 </body>
 </html>
