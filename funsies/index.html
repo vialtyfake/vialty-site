@@ -136,127 +136,6 @@
         }
 
         /* ══════════════════════════════════════════════════════
-           MUSIC SECTION
-        ══════════════════════════════════════════════════════ */
-        .music-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
-
-        .music-column { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; position:relative; }
-        .music-column::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--duo-a) 50%,transparent); opacity:.3; }
-
-        .music-col-header { padding:.9rem 1.1rem .7rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:.5rem; }
-        .music-col-icon { font-size:.9rem; opacity:.6; }
-        .music-col-title { font-size:.63rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted2); }
-
-        .music-item {
-            --item-color: var(--duo-a);
-            display:flex; align-items:center; gap:.75rem;
-            padding:.9rem 1rem;
-            border-bottom:1px solid rgba(255,255,255,.04);
-            transition:background .18s, transform .18s;
-            cursor:default; position:relative;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .music-item:last-child { border-bottom:none; }
-        .music-item::before { content:''; position:absolute; left:0; top:20%; bottom:20%; width:2px; border-radius:2px; background:var(--item-color); opacity:0; transform:scaleY(.4); transition:opacity .2s, transform .2s; }
-        .music-item:hover { background:rgba(255,255,255,.03); transform:translateX(3px); }
-        .music-item:hover::before { opacity:.7; transform:scaleY(1); }
-        .music-item:active { transform:translateX(1px) scale(.98); }
-
-        .music-cover { width:36px; height:36px; border-radius:5px; background:var(--sur2); flex-shrink:0; overflow:hidden; position:relative; }
-        .music-cover img { width:100%; height:100%; object-fit:cover; display:block; }
-        .music-cover-ph { width:100%; height:100%; background:color-mix(in srgb,var(--item-color) 15%,var(--sur2)); display:flex; align-items:center; justify-content:center; font-size:.65rem; color:var(--item-color); opacity:.6; }
-
-        .music-info { flex:1; min-width:0; }
-        .music-name { font-size:.76rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text); }
-        .music-sub  { font-size:.62rem; color:var(--muted2); margin-top:.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .music-rank { font-size:.58rem; color:var(--muted); font-variant-numeric:tabular-nums; }
-
-        /* ══════════════════════════════════════════════════════
-           MUSIC PLAYER
-           Set your audio file in the <audio> src below.
-           Set your artwork in the <img> inside .mp-artwork.
-        ══════════════════════════════════════════════════════ */
-        .music-player {
-            background:var(--surface); border:1px solid var(--border); border-radius:12px;
-            padding:1.2rem 1.4rem; display:flex; align-items:center; gap:1.1rem;
-            position:relative; overflow:hidden; margin-top:1.2rem;
-        }
-        .music-player::before {
-            content:''; position:absolute; top:0; left:0; right:0; height:1px;
-            background:linear-gradient(90deg,transparent,var(--duo-a) 50%,transparent); opacity:.3;
-        }
-        .mp-artwork {
-            width:80px; height:80px; border-radius:8px; background:var(--sur2);
-            flex-shrink:0; overflow:hidden; position:relative;
-            transition:transform .3s ease, box-shadow .3s ease;
-        }
-        .mp-artwork img { width:100%; height:100%; object-fit:cover; display:block; }
-        .mp-artwork.playing {
-            animation: cover-pulse 3s ease-in-out infinite;
-        }
-        @keyframes cover-pulse {
-            0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
-            50% { transform: scale(1.03); box-shadow: 0 0 14px 4px rgba(78, 65, 48, 0.25); }
-        }
-        .mp-artwork-ph {
-            width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-            font-size:1.2rem; color:var(--muted); background:var(--sur2);
-        }
-        .mp-body { flex:1; min-width:0; display:flex; flex-direction:column; gap:.5rem; position:relative; z-index:1; }
-        .mp-title { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; letter-spacing:-.01em; color:var(--text); }
-        .mp-artist { font-size:.72rem; color:var(--muted2); }
-        .mp-controls { display:flex; align-items:center; gap:.8rem; }
-        .mp-play {
-            width:44px; height:44px; border-radius:50%; border:1px solid var(--border);
-            background:var(--sur2); color:var(--text); font-size:.9rem; cursor:pointer;
-            display:flex; align-items:center; justify-content:center;
-            transition:background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease; flex-shrink:0;
-        }
-        @media(max-width:500px){
-            .mp-play {
-                width:50px; height:50px;
-                font-size:1rem;
-            }
-        }
-        .mp-play:hover { background:var(--duo-a); color:var(--bg); border-color:var(--duo-a); }
-        .mp-play:active { transform:scale(.95); }
-        .mp-play.playing {
-            background:var(--accent-2); border-color:var(--accent-2); color:var(--bg);
-            box-shadow: 0 0 14px rgba(34,211,238,0.4);
-        }
-        .mp-progress-wrap { flex:1; display:flex; align-items:center; gap:.6rem; }
-        .mp-time { font-size:.58rem; color:var(--muted); min-width:3.2rem; text-align:center; font-variant-numeric:tabular-nums; }
-        .mp-progress {
-            -webkit-appearance:none; appearance:none; flex:1; height:4px;
-            border-radius:2px; background:linear-gradient(to right, var(--duo-a) var(--fill, 0%), var(--sur2) var(--fill, 0%)); outline:none; cursor:pointer;
-        }
-        .mp-progress::-webkit-slider-thumb {
-            -webkit-appearance:none; appearance:none; width:10px; height:10px;
-            border-radius:50%; background:var(--duo-a); cursor:pointer; border:none;
-        }
-        .mp-progress::-moz-range-thumb {
-            width:10px; height:10px; border-radius:50%; background:var(--duo-a);
-            cursor:pointer; border:none;
-        }
-        .mp-volume {
-            -webkit-appearance:none; appearance:none; width:50px; height:4px;
-            border-radius:2px; background:linear-gradient(to right, var(--duo-a) var(--fill, 0%), var(--sur2) var(--fill, 0%)); outline:none; cursor:pointer; flex-shrink:0;
-        }
-        .mp-volume::-webkit-slider-thumb {
-            -webkit-appearance:none; appearance:none; width:10px; height:10px;
-            border-radius:50%; background:var(--duo-a); cursor:pointer; border:none;
-        }
-        .mp-volume::-moz-range-thumb {
-            width:10px; height:10px; border-radius:50%; background:var(--duo-a);
-            cursor:pointer; border:none;
-        }
-        .mp-volume-wrap {
-            display:flex;
-            align-items:center;
-            gap:.4rem;
-        }
-
-        /* ══════════════════════════════════════════════════════
            SHARED CARD + ROW STYLES (reused by Roblox & Non-Roblox)
         ══════════════════════════════════════════════════════ */
         .games-top { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1rem; }
@@ -370,13 +249,13 @@
         }
         .d2-cover img {
             width:100%; height:100%; object-fit:cover; display:block;
-            object-position: 95% 5%;
+            object-position: 0% 100%;
             transition: transform .5s ease; filter: brightness(.85) saturate(1.1);
         }
         .d2-spotlight:hover .d2-cover img { transform: scale(1.05); filter:brightness(.95) saturate(1.15); }
         .d2-cover-fade {
             position:absolute; inset:0;
-            background: linear-gradient(90deg, transparent 35%, var(--surface) 88%, var(--surface) 100%);
+            background: linear-gradient(90deg, transparent 55%, var(--surface) 88%, var(--surface) 100%);
         }
 
         .d2-body {
@@ -430,49 +309,12 @@
         @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
         @media(max-width:800px){
-            .music-grid { grid-template-columns:1fr; }
             .games-top  { grid-template-columns:1fr; }
         }
         @media(max-width:600px){
             nav { padding:0 1.2rem; }
             .content, .footnote { padding-left:1.2rem; padding-right:1.2rem; }
                 .page-header { padding:7.5rem 1.2rem 2.5rem; }
-        }
-
-        @media(max-width:500px){
-            .music-player {
-                flex-direction:column;
-                align-items:center;
-                text-align:center;
-                gap:1rem;
-                padding:1.2rem;
-            }
-            .mp-artwork {
-                width:100px;
-                height:100px;
-            }
-            .mp-body {
-                width:100%;
-                gap:.4rem;
-            }
-            .mp-controls {
-                flex-wrap:wrap;
-                justify-content:center;
-                gap:.5rem;
-            }
-            .mp-progress-wrap {
-                order:2;
-                width:100%;
-                margin-top:.2rem;
-            }
-            .mp-volume-wrap {
-                display:none;
-            }
-            .mp-volume-wrap .mp-volume {
-                width:100%;
-                height:4px;
-            }
-            .mp-time { min-width:2.5rem; font-size:.55rem; }
         }
     </style>
 </head>
@@ -496,8 +338,7 @@
 
     <div class="content">
         <!-- ════════════════════════════════════════════════
-             NON-ROBLOX GAMES
-             Same structure as Roblox section above.
+             GAMES
              Swap --card-color / --row-color per game.
              Add cover images via .game-cover img src.
         ═════════════════════════════════════════════════ -->
@@ -509,18 +350,31 @@
             </div>
 
             <div class="games-top">
-                <a class="game-card top-pick" style="--card-color:#f85048" href="https://store.steampowered.com/app/553850/?curator_clanid=4777282" target="_blank" rel="noopener">
+                <a class="game-card top-pick" style="--card-color:#698dad" href="https://store.steampowered.com/app/1085660/Destiny_2/?curator_clanid=4777282" target="_blank" rel="noopener">
                     <div class="game-cover">
-                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/553850/0d3b55ad9670b934fa6c81f2ef8db8826440bf0e/capsule_616x353.jpg?t=1770747641" alt="">
-                        <div class="game-cover-ph" style="--card-color:#f85048">◈</div></div>
+                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1085660/5135b68cc0abc626b0104bf4b7f7934a5b0a5a26/capsule_616x353_2x.jpg?t=1781045588" alt="">
+                        <div class="game-cover-ph" style="--card-color:#698dad">◈</div></div>
                     <div class="game-card-body">
                         <div class="game-rank-row">
-                            <span class="game-rank" style="color:#f85048">#1 Favorite</span>
-                            <span class="game-badge" style="--card-color:#f85048">All-time</span>
-                            <span class="game-badge" style="--card-color:#f85048">100+ Hours</span>
+                            <span class="game-rank" style="color:#698dad">#1 Favorite</span>
+                            <span class="game-badge" style="--card-color:#698dad">All-time</span>
+                            <span class="game-badge" style="--card-color:#698dad">1700+ Hours</span>
+                        </div>
+                        <div class="game-title">Destiny 2</div>
+                        <div class="game-by">My Most Fav Game Ever · First-Person Open World Looter Shooter</div>
+                    </div>
+                </a>
+                <a class="game-card" style="--card-color:#f12629" href="https://store.steampowered.com/app/553850/HELLDIVERS_2/" target="_blank" rel="noopener">
+                    <div class="game-cover">
+                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/553850/0d3b55ad9670b934fa6c81f2ef8db8826440bf0e/capsule_616x353_2x.jpg?t=1779899567" alt="">
+                        <div class="game-cover-ph" style="--card-color:#f12629">◈</div></div>
+                    <div class="game-card-body">
+                        <div class="game-rank-row">
+                            <span class="game-rank" style="color:#f12629">#2 Favorite</span>
+                            <span class="game-badge" style="--card-color:#f12629">100+ Hours</span>
                         </div>
                         <div class="game-title">Helldivers 2</div>
-                        <div class="game-by">My Most Fav Game ATM · Third-Person Shooter</div>
+                        <div class="game-by">Love Managed Democracy · Third-Person Shooter</div>
                     </div>
                 </a>
                 <a class="game-card" style="--card-color:#5399d4" href="https://store.steampowered.com/app/1190970/?curator_clanid=4777282" target="_blank" rel="noopener">
@@ -529,31 +383,30 @@
                         <div class="game-cover-ph" style="--card-color:#5399d4">◈</div></div>
                     <div class="game-card-body">
                         <div class="game-rank-row">
-                            <span class="game-rank" style="color:#5399d4">#2 Favorite</span>
+                            <span class="game-rank" style="color:#5399d4">#3 Favorite</span>
                             <span class="game-badge" style="--card-color:#5399d4">550+ Hours</span>
                         </div>
                         <div class="game-title">House Flipper 1 & 2</div>
                         <div class="game-by">Niche but cool · Simulation</div>
                     </div>
                 </a>
-                <a class="game-card" style="--card-color:#cd423b" href="https://store.steampowered.com/app/1304930/?curator_clanid=4777282" target="_blank" rel="noopener">
-                    <div class="game-cover">
-                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1304930/05c384f4640c12cb1c99d9165c75893b567ad6d1/capsule_616x353.jpg?t=1774362779" alt="">
-                        <div class="game-cover-ph" style="--card-color:#cd423b">◈</div></div>
-                    <div class="game-card-body">
-                        <div class="game-rank-row">
-                            <span class="game-rank" style="color:#cd423b">#3 Favorite</span>
-                            <span class="game-badge" style="--card-color:#cd423b">25+ Hours</span>
-                        </div>
-                        <div class="game-title">The Outlast Trials</div>
-                        <div class="game-by">So much chaos and blood · Horror </div>
-                    </div>
-                </a>
             </div>
 
             <div class="games-list">
-                <a class="game-row" style="--row-color:#d8b52c" href="https://store.steampowered.com/app/990080/?curator_clanid=4777282" target="_blank" rel="noopener">
+                <a class="game-row" style="--row-color:#cd423b" href="https://store.steampowered.com/app/1304930/?curator_clanid=4777282" target="_blank" rel="noopener">
                     <span class="game-row-num">04</span>
+                    <div class="game-row-cover">
+                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1304930/05c384f4640c12cb1c99d9165c75893b567ad6d1/capsule_616x353.jpg?t=1774362779" alt="">
+                        <div class="game-row-ph" style="--row-color:#cd423b">◈</div></div>
+                    <div class="game-row-info"><div class="game-row-title">The Outlast Trials</div>
+                    <div class="game-rank-row">
+                            <span class="game-badge" style="--card-color:#cd423b">25+ Hours</span>
+                    </div>
+                    <div class="game-row-sub">So much nerves and blood · Horror </div></div>
+                    <span class="game-row-arrow">↗</span>
+                </a>
+                <a class="game-row" style="--row-color:#d8b52c" href="https://store.steampowered.com/app/990080/?curator_clanid=4777282" target="_blank" rel="noopener">
+                    <span class="game-row-num">05</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/990080/22dd5a52e39a1952e77da2bd4ee49cc2e5e1a972/capsule_616x353_2x.jpg?t=1777939539" alt="">
                         <div class="game-row-ph" style="--row-color:#d8b52c">◈</div></div>
@@ -565,7 +418,7 @@
                     <span class="game-row-arrow">↗</span>
                 </a>
                 <a class="game-row" style="--row-color:#398b83" href="https://store.steampowered.com/app/1321680/?curator_clanid=4777282" target="_blank" rel="noopener">
-                    <span class="game-row-num">05</span>
+                    <span class="game-row-num">06</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1321680/6a77d22e4bdbc7ffe2bea03783ae2b0c113dcb97/hero_capsule.jpg?t=1763986797" alt="">
                         <div class="game-row-ph" style="--row-color:#398b83">◈</div></div>
@@ -577,7 +430,7 @@
                     <span class="game-row-arrow">↗</span>
                 </a>
                 <a class="game-row" style="--row-color:#090a10" href="https://store.steampowered.com/app/739630/?curator_clanid=4777282" target="_blank" rel="noopener">
-                    <span class="game-row-num">06</span>
+                    <span class="game-row-num">07</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/739630/ca34091f988664f15ce31b912c210715add2766b/capsule_616x353.jpg?t=1776847215" alt="">
                         <div class="game-row-ph" style="--row-color:#090a10">◈</div></div>
@@ -585,11 +438,11 @@
                     <div class="game-rank-row">
                             <span class="game-badge" style="--card-color:#859ac2">25+ Hours</span>
                     </div>
-                    <div class="game-row-sub">Best horror game with friends · Horror</div></div>
+                    <div class="game-row-sub">Cool game · Horror</div></div>
                     <span class="game-row-arrow">↗</span>
                 </a>
                 <a class="game-row" style="--row-color:#30b5e9" href="https://store.steampowered.com/app/848450/?curator_clanid=4777282" target="_blank" rel="noopener">
-                    <span class="game-row-num">07</span>
+                    <span class="game-row-num">08</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/ceed43f5d774d84a5578eccaaec6842cb9591667/capsule_616x353.jpg?t=1779437128" alt="">
                         <div class="game-row-ph" style="--row-color:#30b5e9">◈</div></div>
@@ -601,7 +454,7 @@
                     <span class="game-row-arrow">↗</span>
                 </a>
                 <a class="game-row" style="--row-color:#fdfc02" href="https://store.steampowered.com/app/1091500/?curator_clanid=4777282" target="_blank" rel="noopener">
-                    <span class="game-row-num">08</span>
+                    <span class="game-row-num">09</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/a757b56d2078be8b09a04e2ad531f1fefafaa129/capsule_616x353.jpg?t=1769690377" alt="">
                         <div class="game-row-ph" style="--row-color:#fdfc02">◈</div></div>
@@ -613,7 +466,7 @@
                     <span class="game-row-arrow">↗</span>
                 </a>
                 <a class="game-row" style="--row-color:#486dcc" href="https://store.steampowered.com/app/1222140/?curator_clanid=4777282" target="_blank" rel="noopener">
-                    <span class="game-row-num">09</span>
+                    <span class="game-row-num">10</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1222140/capsule_616x353.jpg?t=1667468479" alt="">
                         <div class="game-row-ph" style="--row-color:#486dcc">◈</div></div>
@@ -621,27 +474,15 @@
                     <div class="game-rank-row">
                             <span class="game-badge" style="--card-color:#486dcc">15+ Hours</span>
                     </div>
-                    <div class="game-row-sub">Best story game I've ever played. No game can ever be as good as this one · Adventure</div></div>
-                    <span class="game-row-arrow">↗</span>
-                </a>
-                <a class="game-row" style="--row-color:#30b5e9" href="https://store.steampowered.com/app/848450/?curator_clanid=4777282" target="_blank" rel="noopener">
-                    <span class="game-row-num">10</span>
-                    <div class="game-row-cover">
-                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/848450/capsule_616x353.jpg?t=1774343326" alt="">
-                        <div class="game-row-ph" style="--row-color:#30b5e9">◈</div></div>
-                    <div class="game-row-info"><div class="game-row-title">Subnautica: Below Zero</div>
-                    <div class="game-rank-row">
-                            <span class="game-badge" style="--card-color:#30b5e9">15+ Hours</span>
-                    </div>
-                    <div class="game-row-sub">Subnautica 2 is here! · Open World Survival Craft</div></div>
+                    <div class="game-row-sub">Best story game I've ever played. · Adventure</div></div>
                     <span class="game-row-arrow">↗</span>
                 </a>
             </div>
 
             <!-- ── DESTINY 2 EXCLUSIVE SPOTLIGHT ── -->
-            <a class="d2-spotlight top-pick reveal" style="--card-color:#c9a85c" href="https://store.steampowered.com/app/1085660/Destiny_2/" target="_blank" rel="noopener">
+            <a class="d2-spotlight top-pick reveal" style="--card-color:#698dad" href="https://store.steampowered.com/app/1085660/Destiny_2/" target="_blank" rel="noopener">
                 <div class="d2-cover">
-                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1085660/8275f5efdec00ef5f8880865583c3f45d7919570/library_hero_2x.jpg" alt="Destiny 2">
+                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1085660/5135b68cc0abc626b0104bf4b7f7934a5b0a5a26/capsule_616x353_2x.jpg?t=1781045588" alt="Destiny 2">
                     <div class="d2-cover-fade"></div>
                 </div>
                 <div class="d2-body">
@@ -662,213 +503,6 @@
                 </div>
             </a>
 
-        </section>
-
-        <!-- ════════════════════════════════════════════════
-             MUSIC
-             Each .music-item:
-               data-color="#hex"   → accent color
-               .music-cover img    → add src for cover art
-               .music-name / .music-sub / .music-rank
-             First item in each column gets star glint automatically.
-        ═════════════════════════════════════════════════ -->
-        <section class="reveal">
-            <div class="section-header">
-                <span class="section-label">// music</span>
-                <h2 class="section-title">What I'm listening to</h2>
-            </div>
-            <div class="music-grid">
-
-                <!-- ARTISTS -->
-                <div class="music-column">
-                    <div class="music-col-header">
-                        <span class="music-col-icon">♪</span>
-                        <span class="music-col-title">Artists</span>
-                    </div>
-                    <div class="music-item top-pick" data-color="#c7a57a">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/3d/cc/a8/3dcca8b6-7883-0cd7-7729-9756909316d9/file_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c7a57a">♪</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">Ariana Grande</div>
-                            <div class="music-sub">Pop · US</div>
-                        </div>
-                        <span class="music-rank">01</span>
-                    </div>
-                    <div class="music-item" data-color="#c4112c">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/04/a8/54/04a854b5-5748-dba1-e99e-9817c87887c9/ami-identity-7d4c30a95a90f129a834aecd444aa07a-2025-09-25T23-01-04.317Z_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c4112c">♪</div></div>
-                        <div class="music-info"><div class="music-name">Doja Cat</div><div class="music-sub">R&B/Soul · US</div></div>
-                        <span class="music-rank">02</span>
-                    </div>
-                    <div class="music-item" data-color="#051f38">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages211/v4/e1/f3/6a/e1f36a60-9897-162d-3697-7501eeafbc3b/a1d41336-49bd-4212-8787-57547ca3f87e_ami-identity-ef10a72d4764d04743b17fa13520b756-2024-04-08T15-24-54.609Z_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#051f38">♪</div></div>
-                        <div class="music-info"><div class="music-name">Billie Eilish</div><div class="music-sub">Alternative · US</div></div>
-                        <span class="music-rank">03</span>
-                    </div>
-                    <div class="music-item" data-color="#e9f8f5">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/cf/07/d3/cf07d3cc-7b1f-1294-0a43-612e1de21c5c/ami-identity-af8411f7c180019cd3683c527e92edb7-2025-06-19T23-30-09.515Z_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#e9f8f5">♪</div></div>
-                        <div class="music-info"><div class="music-name">BENEE</div><div class="music-sub">Alternative · New Zealand</div></div>
-                        <span class="music-rank">04</span>
-                    </div>
-                    <div class="music-item" data-color="#e7afb8">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/AMCArtistImages221/v4/04/0d/cc/040dcc08-1b20-4748-898f-fc676e2060e6/ami-identity-5b05d351a6e3c7256ef7680c8aef2894-2026-04-02T16-03-02.313Z_cropped.png/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#e7afb8">♪</div></div>
-                        <div class="music-info"><div class="music-name">Olivia Rodrigo</div><div class="music-sub">Pop · US</div></div>
-                        <span class="music-rank">05</span>
-                    </div>
-                </div>
-
-                <!-- ALBUMS -->
-                <div class="music-column">
-                    <div class="music-col-header">
-                        <span class="music-col-icon">◫</span>
-                        <span class="music-col-title">Albums</span>
-                    </div>
-                    <div class="music-item top-pick" data-color="#c7a57a">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c7a57a">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">eternal sunshine</div>
-                            <div class="music-sub">Ariana Grande · 2024</div>
-                        </div>
-                        <span class="music-rank">01</span>
-                    </div>
-                    <div class="music-item" data-color="#ffffff">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8b/02/52/8b02528c-8282-6709-dbb3-953da86c6e37/196871470124.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#ffffff">◫</div></div>
-                        <div class="music-info"><div class="music-name">Scarlet</div><div class="music-sub">Doja Cat · 2023</div></div>
-                        <span class="music-rank">02</span>
-                    </div>
-                    <div class="music-item" data-color="#d2d3d9">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/47/73/22/477322f0-a478-54de-485a-8502d9cb3ab2/25UM1IM19859.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#d2d3d9">◫</div></div>
-                        <div class="music-info"><div class="music-name">Ur an Angel I’m Just Particles</div><div class="music-sub">BENEE · 2025</div></div>
-                        <span class="music-rank">03</span>
-                    </div>
-                    <div class="music-item" data-color="#1f79c7">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a8/c7/ea/a8c7eaf1-d92b-2ce6-74e4-1282b369cd38/196873471068.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#1f79c7">◫</div></div>
-                        <div class="music-info"><div class="music-name">Vie</div><div class="music-sub">Doja Cat · 2025</div></div>
-                        <span class="music-rank">04</span>
-                    </div>
-                    <div class="music-item" data-color="#051f38">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/92/9f/69/929f69f1-9977-3a44-d674-11f70c852d1b/24UMGIM36186.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#051f38">◫</div></div>
-                        <div class="music-info"><div class="music-name">HIT ME HARD AND SOFT</div><div class="music-sub">Billie Eilish · 2024</div></div>
-                        <span class="music-rank">05</span>
-                    </div>
-                </div>
-
-                <!-- TRACKS -->
-                <div class="music-column">
-                    <div class="music-col-header">
-                        <span class="music-col-icon">▶</span>
-                        <span class="music-col-title">Tracks</span>
-                    </div>
-                    <div class="music-item top-pick" data-color="#c7a57a">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c7a57a">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">we can't be friends (wait for your love)</div>
-                            <div class="music-sub">Ariana Grande · eternal sunshine</div>
-                        </div>
-                        <span class="music-rank">01</span>
-                    </div>
-                    <div class="music-item" data-color="#c9c9c9">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/12/5d/63/125d6389-2205-c77c-702c-8128e9020bd6/16UMGIM12432.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#c9c9c9">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">Into You</div>
-                            <div class="music-sub">Ariana Grande · Dangerous Woman</div>
-                        </div>
-                        <span class="music-rank">02</span>
-                    </div>
-                    <div class="music-item" data-color="#44454a">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/f8/11/ef/f811ef3b-8ca4-ac16-ba71-1dca7304a8ba/22UMGIM49145.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#44454a">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">I Like You (A Happier Song) [feat. Doja Cat]</div>
-                            <div class="music-sub">Post Malone, Doja Cat · Twelve Carat Toothache (Deluxe)</div>
-                        </div>
-                        <span class="music-rank">03</span>
-                    </div>
-                    <div class="music-item" data-color="#ffffff">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/8b/02/52/8b02528c-8282-6709-dbb3-953da86c6e37/196871470124.jpg/256x256bb.jpg" alt="">
-                            <div class="music-cover-ph" style="--item-color:#ffffff">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">Paint The Town Red</div>
-                            <div class="music-sub">Doja Cat · Scarlet</div>
-                        </div>
-                        <span class="music-rank">04</span>
-                    </div>
-                    <div class="music-item" data-color="#e2bc90">
-                        <div class="music-cover">
-                            <img src="https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c4/7e/22/c47e22bf-0d2b-e211-815c-39c41428c6a4/23UMGIM16392.rgb.jpg/256x256bb.webp" alt="">
-                            <div class="music-cover-ph" style="--item-color:#e2bc90">◫</div>
-                        </div>
-                        <div class="music-info">
-                            <div class="music-name">Feather</div>
-                            <div class="music-sub">Sabrina Carpenter · emails i can’t send fwd:</div>
-                        </div>
-                        <span class="music-rank">05</span>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- ════════════════════════════════════════════════
-             MUSIC PLAYER
-             Set your song file in the <audio> src.
-             Set your artwork in the <img> inside .mp-artwork.
-        ═════════════════════════════════════════════════ -->
-        <section class="reveal">
-            <div class="music-player">
-                <div class="mp-artwork">
-                    <img src="https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/34/fe/a1/34fea184-6d20-3f50-b4ce-5e1501c1c5ab/24UMGIM00198.rgb.jpg/300x300bb.webp" alt="Song artwork">
-                    <div class="mp-artwork-ph">♫</div>
-                </div>
-                <div class="mp-body">
-                    <div class="mp-info">
-                        <div class="mp-title">we can't be friends (wait for your love)</div>
-                        <div class="mp-artist">Ariana Grande</div>
-                    </div>
-                    <div class="mp-controls">
-                        <button class="mp-play" id="mp-play" aria-label="Play">▶</button>
-                        <div class="mp-progress-wrap">
-                            <span class="mp-time" id="mp-current">0:00</span>
-                            <input type="range" class="mp-progress" id="mp-progress" min="0" max="100" value="0" aria-label="Seek">
-                            <span class="mp-time" id="mp-duration">0:00</span>
-                        </div>
-                        <div class="mp-volume-wrap">
-                            <input type="range" class="mp-volume" id="mp-volume" min="0" max="1" step="0.01" value="0.5" aria-label="Volume">
-                        </div>
-                    </div>
-                    <audio id="mp-audio" src="/audio/we-can't-be-friends-(wait-for-your-love)-Ariana-Grande.mp3" preload="metadata"></audio>
-                </div>
-            </div>
         </section>
 
     </div>
@@ -897,11 +531,6 @@
             });
         }, { threshold: 0.06 });
         revealEls.forEach(el => obs.observe(el));
-
-        // ── Apply data-color to music items ──
-        document.querySelectorAll('.music-item[data-color]').forEach(el => {
-            el.style.setProperty('--item-color', el.dataset.color);
-        });
 
         // ── Star glint: inject animated stars into .top-pick elements ──
         // Each star gets a random position, size, color, delay, and duration.
@@ -947,79 +576,6 @@
             el.appendChild(wrapper);
         });
 
-        // ── Music player ──
-        const mpAudio     = document.getElementById('mp-audio');
-        const mpPlay      = document.getElementById('mp-play');
-        const mpVol       = document.getElementById('mp-volume');
-        const mpProgress = document.getElementById('mp-progress');
-        const mpCurrent  = document.getElementById('mp-current');
-        const mpDuration = document.getElementById('mp-duration');
-        const mpArtwork  = document.querySelector('.mp-artwork');
-
-        function updateRangeFill(el) {
-            const min = el.min ? parseFloat(el.min) : 0;
-            const max = el.max ? parseFloat(el.max) : 100;
-            const val = parseFloat(el.value);
-            const pct = ((val - min) / (max - min)) * 100;
-            el.style.setProperty('--fill', pct + '%');
-        }
-
-        if (mpAudio && mpPlay && mpVol && mpProgress && mpCurrent && mpDuration) {
-            mpPlay.addEventListener('click', () => {
-                if (mpAudio.paused) {
-                    mpAudio.play().catch(() => {});
-                    mpPlay.textContent = '❚❚';
-                    mpPlay.classList.add('playing');
-                    mpArtwork.classList.add('playing');
-                } else {
-                    mpAudio.pause();
-                    mpPlay.textContent = '▶';
-                    mpPlay.classList.remove('playing');
-                    mpArtwork.classList.remove('playing');
-                }
-            });
-            mpAudio.addEventListener('ended', () => {
-                mpPlay.textContent = '▶';
-                mpPlay.classList.remove('playing');
-                mpArtwork.classList.remove('playing');
-            });
-            mpAudio.addEventListener('timeupdate', () => {
-                if (mpAudio.duration) {
-                    const pct = (mpAudio.currentTime / mpAudio.duration) * 100;
-                    mpProgress.value = pct;
-                    mpCurrent.textContent = formatTime(mpAudio.currentTime);
-                    updateRangeFill(mpProgress);
-                }
-            });
-            mpAudio.addEventListener('loadedmetadata', () => {
-                mpDuration.textContent = formatTime(mpAudio.duration);
-            });
-            mpVol.addEventListener('input', () => {
-                mpAudio.volume = mpVol.value;
-                mpAudio.muted = false;
-                updateRangeFill(mpVol);
-            });
-            mpVol.addEventListener('change', () => {
-                mpAudio.volume = mpVol.value;
-                mpAudio.muted = false;
-                updateRangeFill(mpVol);
-            });
-            mpProgress.addEventListener('input', () => {
-                if (mpAudio.duration) {
-                    mpAudio.currentTime = (mpProgress.value / 100) * mpAudio.duration;
-                }
-                updateRangeFill(mpProgress);
-            });
-            mpAudio.volume = mpVol.value;
-            updateRangeFill(mpVol);
-            updateRangeFill(mpProgress);
-        }
-        function formatTime(s) {
-            if (isNaN(s)) return '0:00';
-            const m = Math.floor(s / 60);
-            const sec = Math.floor(s % 60);
-            return m + ':' + (sec < 10 ? '0' : '') + sec;
-        }
     })();
     </script>
 </body>
