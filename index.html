@@ -25,9 +25,6 @@
             --accent-2:#22d3ee;
             --accent-3:#ff3838;
 
-            /* Background Image Customization */
-            /* Point this to your background image file when ready */
-            --bg-image: url('/images/main/background.JPG');
             /* Adjustable dimming overlay: 0 is fully transparent, 1 is solid black */
             --bg-dim-opacity: 0.7; 
         }
@@ -40,18 +37,15 @@
             min-height: 100vh; overflow-x: hidden;
         }
 
-        /* Fixed Background Image Container with Dim Overlay */
+        /* Fixed Background Container */
         .bg-container {
             position: fixed;
             inset: 0;
             z-index: -2;
             pointer-events: none;
             background-color: var(--bg);
-            background-image: var(--bg-image);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 26px 26px;
         }
 
         .bg-dimmer {
