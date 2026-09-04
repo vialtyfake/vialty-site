@@ -23,10 +23,7 @@
             --duo-a:   #ffffff;
             --duo-b:   #ffffff;
             --accent-2:#22d3ee;
-            --accent-3:#ff3838;
-
-            /* Adjustable dimming overlay: 0 is fully transparent, 1 is solid black */
-            --bg-dim-opacity: 0.7; 
+            --accent-3:#ff3838; 
         }
 
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -44,18 +41,11 @@
             z-index: -2;
             pointer-events: none;
             background-color: var(--bg);
-            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 26px 26px;
-        }
-
-        .bg-dimmer {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-            background-color: rgba(12, 12, 12, var(--bg-dim-opacity));
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background-image:
+                radial-gradient(ellipse 55% 45% at 12% 8%, rgba(34,211,238,0.07), transparent 65%),
+                radial-gradient(ellipse 50% 45% at 88% 92%, rgba(255,56,56,0.055), transparent 65%),
+                radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 26px 26px;
         }
 
         nav {
@@ -311,7 +301,6 @@
 <body>
     <!-- Background layers -->
     <div class="bg-container"></div>
-    <div class="bg-dimmer"></div>
 
     <nav>
         <a href="/index.html" class="logo">V<em>.</em></a>

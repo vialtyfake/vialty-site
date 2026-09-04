@@ -22,9 +22,7 @@
             --duo-a:   #ffffff;
             --duo-b:   #ffffff;
             --accent-2:#22d3ee;
-            --accent-3:#ff3838;
-
-            --bg-dim-opacity: 0.7; 
+            --accent-3:#ff3838; 
         }
 
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -42,18 +40,11 @@
             z-index: -2;
             pointer-events: none;
             background-color: var(--bg);
-            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 26px 26px;
-        }
-
-        .bg-dimmer {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-            background-color: rgba(12, 12, 12, var(--bg-dim-opacity));
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background-image:
+                radial-gradient(ellipse 55% 45% at 12% 8%, rgba(34,211,238,0.07), transparent 65%),
+                radial-gradient(ellipse 50% 45% at 88% 92%, rgba(255,56,56,0.055), transparent 65%),
+                radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 26px 26px;
         }
 
         /* ── NAV ─── */
@@ -316,7 +307,6 @@
 <body>
     <!-- Background layers -->
     <div class="bg-container"></div>
-    <div class="bg-dimmer"></div>
 
     <nav>
         <a href="/index.html" class="logo">V<em>.</em></a>
@@ -448,7 +438,7 @@
                     <span class="game-row-arrow">↗</span>
                 </a>
                 <a class="game-row" style="--row-color:#486dcc" href="https://store.steampowered.com/app/1222140/?curator_clanid=4777282" target="_blank" rel="noopener">
-                    <span class="game-row-num">9</span>
+                    <span class="game-row-num">09</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1222140/capsule_616x353.jpg?t=1667468479" alt="">
                         <div class="game-row-ph" style="--row-color:#486dcc">◈</div></div>
@@ -494,8 +484,8 @@
             <span class="footnote-icon">✦</span>
             <p class="footnote-text">
                 This entire website was designed and coded with the help of
-                <strong><a href="https://gemini.google.com/" target="_blank" rel="noopener">Gemini</a></strong>
-                by Google. Most of the thing were made by me anyways
+                <strong><a>some AI models</a></strong>.
+                Most of the thing were done by me anyways
             </p>
         </div>
     </footer>
