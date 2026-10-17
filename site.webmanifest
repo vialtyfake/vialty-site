@@ -15,6 +15,12 @@
       "purpose": "any"
     },
     {
+      "src": "/images/main/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
       "src": "/images/main/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
