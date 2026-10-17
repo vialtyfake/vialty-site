@@ -130,7 +130,8 @@
             --card-color: var(--duo-a);
             background:var(--surface); border:1px solid var(--border);
             border-radius:12px; overflow:hidden;
-            text-decoration:none; color:inherit;
+            text-decoration:none; color:inherit; cursor:pointer;
+            -webkit-tap-highlight-color:transparent;
             display:flex; flex-direction:column; position:relative;
             transition:transform .25s cubic-bezier(.22,1,.36,1), border-color .25s, box-shadow .25s;
             will-change:transform;
@@ -161,7 +162,7 @@
             display:flex; align-items:center; gap:.85rem;
             padding:1rem 1.1rem;
             border-bottom:1px solid rgba(255,255,255,.04);
-            text-decoration:none; color:inherit;
+            text-decoration:none; color:inherit; cursor:pointer;
             transition:background .18s, transform .18s; position:relative;
             -webkit-tap-highlight-color: transparent;
         }
@@ -179,7 +180,7 @@
         .game-row-title { font-size:.8rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .game-row-sub   { font-size:.62rem; color:var(--muted2); margin-top:.15rem; }
         .game-row-arrow { font-size:.95rem; color:var(--row-color); opacity:.3; transition:opacity .18s, transform .18s; }
-        .game-row:hover .game-row-arrow { opacity:1; transform:translate(2px,-2px); }
+        .game-row:hover .game-row-arrow { opacity:1; transform:rotate(45deg) scale(1.05); }
 
         /* ── FOOTNOTE ─── */
         .footnote { position:relative; z-index:1; max-width:1000px; margin:3rem auto 0; padding:0 2rem 5rem; }
@@ -202,6 +203,8 @@
             overflow: hidden !important;
             text-decoration: none;
             color: inherit;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
             display: flex;
             min-height: 300px;
             margin-top: 1.4rem;
@@ -292,6 +295,169 @@
             .d2-body { padding:1.4rem 1.2rem 1.6rem; }
         }
 
+        /* ══════════════════════════════════════════════════════
+           GAME DETAIL POPUP
+           Every .game-card / .game-row / .d2-spotlight can open
+           one shared popup. Its content is authored per item:
+             data-title  — optional override; defaults to the
+                           item's own title (.game-title,
+                           .game-row-title, .d2-title)
+             data-time   — time played, written by hand
+             data-genre  — genre, written by hand
+             data-desc   — long text for the sunken field
+             data-img    — optional hero image; defaults to the
+                           item's own cover <img>
+             data-color  — optional accent override (handy when
+                           --row-color is too dark to read)
+           Accent color comes from --card-color / --row-color.
+        ══════════════════════════════════════════════════════ */
+        .gmodal-backdrop {
+            position:fixed; inset:0; z-index:900;
+            background:rgba(0,0,0,.82);
+            backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+            display:flex; align-items:center; justify-content:center;
+            padding:1.5rem;
+            opacity:0; pointer-events:none;
+            transition:opacity .22s ease;
+        }
+        .gmodal-backdrop.open { opacity:1; pointer-events:all; }
+
+        .gmodal {
+            --g-color: var(--duo-a);
+            position:relative;
+            width:100%; max-width:620px; min-width:0; max-height:90vh;
+            background:var(--surface);
+            border:1px solid var(--brd2); border-radius:16px;
+            overflow:hidden;
+            box-shadow:0 24px 70px rgba(0,0,0,.7);
+            transform:translateY(18px) scale(.98);
+            transition:transform .28s cubic-bezier(.22,1,.36,1);
+        }
+        .gmodal-backdrop.open .gmodal { transform:translateY(0) scale(1); }
+
+        /* blurred + dimmed cover used as the card background */
+        .gmodal-bg {
+            position:absolute; inset:-40px;
+            background-image:var(--gmodal-img, none);
+            background-size:cover; background-position:center;
+            filter:blur(22px) brightness(.42) saturate(1.15);
+            transform:scale(1.08);
+            opacity:.9;
+            pointer-events:none;
+        }
+        .gmodal-dim {
+            position:absolute; inset:0; pointer-events:none;
+            background:linear-gradient(180deg,
+                rgba(12,12,12,.30) 0%,
+                rgba(12,12,12,.58) 45%,
+                rgba(10,10,10,.84) 75%,
+                #0d0d0d 100%);
+        }
+        .gmodal::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:2px; z-index:5;
+            background:linear-gradient(90deg, transparent, var(--g-color) 20%, var(--g-color) 80%, transparent);
+            opacity:.85; pointer-events:none;
+        }
+
+        .gmodal-scroll {
+            position:relative; z-index:2;
+            max-height:90vh; overflow-y:auto;
+            scrollbar-width:thin; scrollbar-color:#2a2a2a transparent;
+        }
+
+        .gmodal-hero {
+            position:relative; aspect-ratio:16/8;
+            background:var(--sur2); overflow:hidden;
+        }
+        .gmodal-hero img { width:100%; height:100%; object-fit:cover; display:block; }
+        .gmodal-hero-fade {
+            position:absolute; inset:0;
+            background:linear-gradient(0deg,
+                rgba(13,13,13,.94) 0%,
+                rgba(13,13,13,.18) 48%,
+                transparent 100%);
+        }
+
+        .gmodal-body { padding:1.4rem 1.6rem 1.7rem; }
+
+        .gmodal-head {
+            display:flex; align-items:flex-start; justify-content:space-between;
+            gap:1rem; margin-bottom:1.1rem;
+        }
+        .gmodal-head > div { min-width:0; }
+        .gmodal-label {
+            display:flex; align-items:center; gap:.45rem;
+            font-size:.56rem; letter-spacing:.26em; text-transform:uppercase;
+            color:var(--g-color); margin-bottom:.5rem;
+        }
+        .gmodal-label span {
+            display:block; width:14px; height:1px;
+            background:var(--g-color); opacity:.55;
+        }
+        .gmodal-title {
+            font-family:'Syne',sans-serif; font-weight:800;
+            font-size:clamp(1.5rem,4vw,2rem); line-height:1.05;
+            letter-spacing:-.02em;
+        }
+        .gmodal-close {
+            flex-shrink:0; width:32px; height:32px; border-radius:7px;
+            background:var(--sur2); border:1px solid var(--border);
+            cursor:pointer; color:var(--muted2); font-size:1rem;
+            display:flex; align-items:center; justify-content:center;
+            transition:background .15s, color .15s, transform .15s;
+        }
+        .gmodal-close:hover { background:#242424; color:var(--text); transform:scale(1.08); }
+        .gmodal-close:active { transform:scale(.93); }
+
+        .gmodal-meta { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:.6rem; margin-bottom:.9rem; }
+        .gmodal-meta-item {
+            display:flex; flex-direction:column; gap:.28rem;
+            padding:.6rem .8rem; border-radius:8px;
+            background:rgba(255,255,255,.03);
+            border:1px solid color-mix(in srgb, var(--g-color) 18%, var(--border));
+        }
+        .gmodal-meta-label {
+            font-size:.52rem; letter-spacing:.2em; text-transform:uppercase;
+            color:var(--muted);
+        }
+        .gmodal-meta-value { font-size:.78rem; color:var(--text); line-height:1.35; overflow-wrap:anywhere; }
+
+        /* sunken text field — anything you write in data-desc lands here */
+        .gmodal-note {
+            background:rgba(0,0,0,.42);
+            border:1px solid rgba(0,0,0,.6);
+            border-radius:8px;
+            padding:.95rem 1rem;
+            color:#b9b9b9;
+            font-family:'Space Mono',monospace;
+            font-size:.78rem; line-height:1.9;
+            white-space:pre-line; overflow-wrap:anywhere;
+            max-height:32vh; overflow-y:auto;
+            box-shadow:
+                inset 0 2px 10px rgba(0,0,0,.7),
+                inset 0 0 0 1px rgba(0,0,0,.35),
+                0 1px 0 rgba(255,255,255,.05);
+            scrollbar-width:thin; scrollbar-color:#2a2a2a transparent;
+            transition:border-color .2s, box-shadow .2s;
+        }
+        .gmodal-note:focus-visible {
+            outline:none;
+            border-color:color-mix(in srgb, var(--g-color) 45%, transparent);
+            box-shadow:
+                inset 0 2px 10px rgba(0,0,0,.7),
+                inset 0 0 0 1px rgba(0,0,0,.35),
+                0 0 0 2px color-mix(in srgb, var(--g-color) 22%, transparent);
+        }
+        .gmodal-scroll::-webkit-scrollbar,
+        .gmodal-note::-webkit-scrollbar { width:6px; }
+        .gmodal-scroll::-webkit-scrollbar-thumb,
+        .gmodal-note::-webkit-scrollbar-thumb { background:#2a2a2a; border-radius:999px; }
+
+        @media(max-width:430px){
+            .gmodal-meta { grid-template-columns:1fr; }
+            .gmodal-note { max-height:30vh; }
+        }
+
         @keyframes up { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
         @media(max-width:800px){
@@ -301,6 +467,16 @@
             nav { padding:0 1.2rem; }
             .content, .footnote { padding-left:1.2rem; padding-right:1.2rem; }
                 .page-header { padding:7.5rem 1.2rem 2.5rem; }
+
+            .gmodal-backdrop { padding:.8rem; }
+            .gmodal, .gmodal-scroll { max-height:88vh; }
+            .gmodal-hero { aspect-ratio:16/9; }
+            .gmodal-body { padding:1.15rem 1.15rem 1.4rem; }
+            .gmodal-head { margin-bottom:.9rem; }
+            .gmodal-close { width:36px; height:36px; }
+            .gmodal-meta { gap:.5rem; }
+            .gmodal-meta-item { padding:.55rem .65rem; }
+            .gmodal-note { max-height:34vh; }
         }
     </style>
 </head>
@@ -326,6 +502,15 @@
              GAMES
              Swap --card-color / --row-color per game.
              Add cover images via .game-cover img src.
+
+             Each item opens the shared popup instead of a link.
+             Customize per item:
+               data-title  — optional; defaults to the item's title
+               data-time   — time played (written by hand)
+               data-genre  — genre (written by hand)
+               data-desc   — popup text, any length
+               data-img    — optional hero image; defaults to cover
+               data-color  — optional accent override for the popup
         ═════════════════════════════════════════════════ -->
         <section class="reveal">
             <div class="section-header">
@@ -335,7 +520,11 @@
             </div>
 
             <div class="games-top">
-                <a class="game-card top-pick" style="--card-color:#f12629" href="https://store.steampowered.com/app/553850/HELLDIVERS_2/" target="_blank" rel="noopener">
+                <article class="game-card top-pick" style="--card-color:#f12629"
+                         data-time="100+ Hours"
+                         data-genre="Third-Person Shooter"
+                         data-desc="Love Managed Democracy. Got into this game right before the squids attacked Super Earth and... I fucking love it."
+                         tabindex="0" role="button" aria-label="Open Helldivers 2 details">
                     <div class="game-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/553850/0d3b55ad9670b934fa6c81f2ef8db8826440bf0e/capsule_616x353_2x.jpg?t=1779899567" alt="">
                         <div class="game-cover-ph" style="--card-color:#f12629">◈</div></div>
@@ -347,21 +536,29 @@
                         <div class="game-title">Helldivers 2</div>
                         <div class="game-by">Love Managed Democracy · Third-Person Shooter</div>
                     </div>
-                </a>
-                <a class="game-card" style="--card-color:#5399d4" href="https://store.steampowered.com/app/1190970/?curator_clanid=4777282" target="_blank" rel="noopener">
+                </article>
+                <article class="game-card" style="--card-color:#5399d4"
+                         data-time="630+ Hours"
+                         data-genre="Simulation"
+                         data-desc="Niche but cool. Been playing this masterpiece since 2018 (a bit after release) and I spent so much time in it. I don't even know why House Flipper is my most favorite simulator game but it is."
+                         tabindex="0" role="button" aria-label="Open House Flipper Franchise details">
                     <div class="game-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1190970/a21c39496d6abc69cba4fd9ad78ab489b3f3b115/capsule_616x353_2x.jpg?t=1775768448" alt="">
                         <div class="game-cover-ph" style="--card-color:#5399d4">◈</div></div>
                     <div class="game-card-body">
                         <div class="game-rank-row">
                             <span class="game-rank" style="color:#5399d4">#2 Favorite</span>
-                            <span class="game-badge" style="--card-color:#5399d4">600+ Hours</span>
+                            <span class="game-badge" style="--card-color:#5399d4">630+ Hours</span>
                         </div>
                         <div class="game-title">House Flipper Franchise</div>
                         <div class="game-by">Niche but cool · Simulation</div>
                     </div>
-                </a>
-                <a class="game-card" style="--card-color:#30b5e9" href="https://store.steampowered.com/app/1962700/Subnautica_2/" target="_blank" rel="noopener">
+                </article>
+                <article class="game-card" style="--card-color:#30b5e9"
+                         data-time="30+ Hours"
+                         data-genre="Survival"
+                         data-desc="Amazing game. My thalassophobia makes this game so fucking scary sometimes. Sound Design in this one is even better than in Subnautica 1."
+                         tabindex="0" role="button" aria-label="Open Subnautica 2 details">
                     <div class="game-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/ceed43f5d774d84a5578eccaaec6842cb9591667/capsule_616x353_2x.jpg?t=1785967256" alt="">
                         <div class="game-cover-ph" style="--card-color:#30b5e9">◈</div></div>
@@ -373,35 +570,47 @@
                         <div class="game-title">Subnautica 2</div>
                         <div class="game-by">Amazing game · Survival</div>
                     </div>
-                </a>
+                </article>
             </div>
 
             <div class="games-list">
-                <a class="game-row" style="--row-color:#cd423b" href="https://store.steampowered.com/app/1304930/?curator_clanid=4777282" target="_blank" rel="noopener">
+                <article class="game-row" style="--row-color:#cd423b"
+                         data-time="25+ Hours"
+                         data-genre="Horror"
+                         data-desc="So much nerves and blood. The best stressfull horror I ever played. Love Murkoff btw."
+                         tabindex="0" role="button" aria-label="Open The Outlast Trials details">
                     <span class="game-row-num">04</span>
                     <div class="game-row-cover">
-                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1304930/05c384f4640c12cb1c99d9165c75893b567ad6d1/capsule_616x353.jpg?t=1774362779" alt="">
+                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1304930/05c384f4640c12cb1c99d9165c75893b567ad6d1/capsule_616x353_2x.jpg?t=1774362779" alt="">
                         <div class="game-row-ph" style="--row-color:#cd423b">◈</div></div>
                     <div class="game-row-info"><div class="game-row-title">The Outlast Trials</div>
                     <div class="game-rank-row">
                             <span class="game-badge" style="--card-color:#cd423b">25+ Hours</span>
                     </div>
                     <div class="game-row-sub">So much nerves and blood · Horror </div></div>
-                    <span class="game-row-arrow">↗</span>
-                </a>
-                <a class="game-row" style="--row-color:#398b83" href="https://store.steampowered.com/app/1321680/?curator_clanid=4777282" target="_blank" rel="noopener">
+                    <span class="game-row-arrow">＋</span>
+                </article>
+                <article class="game-row" style="--row-color:#398b83"
+                         data-time="100+ Hours"
+                         data-genre="Adventure"
+                         data-desc="All HN games are amazing. Been playing them since Alpha 2. And for now - HN2 has the best atmosphere of all HN games, that autumn feel is amazing. And when I play HN3 testing versions they have even better atmosphere."
+                         tabindex="0" role="button" aria-label="Open Hello Neighbor Franchise details">
                     <span class="game-row-num">05</span>
                     <div class="game-row-cover">
-                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1321680/6a77d22e4bdbc7ffe2bea03783ae2b0c113dcb97/hero_capsule.jpg?t=1763986797" alt="">
+                        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2789680/a123133219224dbdbc997e8c42faa95ca6ed0a2b/capsule_616x353_2x.jpg?t=1776438541" alt="">
                         <div class="game-row-ph" style="--row-color:#398b83">◈</div></div>
                     <div class="game-row-info"><div class="game-row-title">Hello Neighbor Franchise</div>
                     <div class="game-rank-row">
                             <span class="game-badge" style="--card-color:#398b83">100+ Hours</span>
                     </div>
                     <div class="game-row-sub">All HN games are amazing · Adventure</div></div>
-                    <span class="game-row-arrow">↗</span>
-                </a>
-                <a class="game-row" style="--row-color:#d8b52c" href="https://store.steampowered.com/app/990080/?curator_clanid=4777282" target="_blank" rel="noopener">
+                    <span class="game-row-arrow">＋</span>
+                </article>
+                <article class="game-row" style="--row-color:#d8b52c"
+                         data-time="50+ Hours"
+                         data-genre="Open World RPG"
+                         data-desc="This game got me hooked from the very start. One of the best games I've played in 2026 (when I got my hands on it)."
+                         tabindex="0" role="button" aria-label="Open Hogwarts Legacy details">
                     <span class="game-row-num">06</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/990080/22dd5a52e39a1952e77da2bd4ee49cc2e5e1a972/capsule_616x353_2x.jpg?t=1777939539" alt="">
@@ -410,10 +619,14 @@
                     <div class="game-rank-row">
                             <span class="game-badge" style="--card-color:#d8b52c">50+ Hours</span>
                     </div>
-                    <div class="game-row-sub">This game got me hooked from the very start. One of the best games I've played in the last years · Open World RPG</div></div>
-                    <span class="game-row-arrow">↗</span>
-                </a>
-                <a class="game-row" style="--row-color:#090a10" href="https://store.steampowered.com/app/739630/?curator_clanid=4777282" target="_blank" rel="noopener">
+                    <div class="game-row-sub">This game got me hooked from the very start. · Open World RPG</div></div>
+                    <span class="game-row-arrow">＋</span>
+                </article>
+                <article class="game-row" style="--row-color:#090a10" data-color="#859ac2"
+                         data-time="25+ Hours"
+                         data-genre="Horror"
+                         data-desc="Cool game. Playing it alone is fucking stressfull."
+                         tabindex="0" role="button" aria-label="Open Phasmophobia details">
                     <span class="game-row-num">07</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/739630/ca34091f988664f15ce31b912c210715add2766b/capsule_616x353.jpg?t=1776847215" alt="">
@@ -423,9 +636,13 @@
                             <span class="game-badge" style="--card-color:#859ac2">25+ Hours</span>
                     </div>
                     <div class="game-row-sub">Cool game · Horror</div></div>
-                    <span class="game-row-arrow">↗</span>
-                </a>
-                <a class="game-row" style="--row-color:#fdfc02" href="https://store.steampowered.com/app/1091500/?curator_clanid=4777282" target="_blank" rel="noopener">
+                    <span class="game-row-arrow">＋</span>
+                </article>
+                <article class="game-row" style="--row-color:#fdfc02"
+                         data-time="25+ Hours"
+                         data-genre="Cyberpunk"
+                         data-desc="The world, the story and the soundtrack - pure peak."
+                         tabindex="0" role="button" aria-label="Open Cyberpunk 2077 details">
                     <span class="game-row-num">08</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/a757b56d2078be8b09a04e2ad531f1fefafaa129/capsule_616x353.jpg?t=1769690377" alt="">
@@ -435,9 +652,13 @@
                             <span class="game-badge" style="--card-color:#fdfc02">25+ Hours</span>
                     </div>
                     <div class="game-row-sub">Hello, Night City! · Cyberpunk</div></div>
-                    <span class="game-row-arrow">↗</span>
-                </a>
-                <a class="game-row" style="--row-color:#486dcc" href="https://store.steampowered.com/app/1222140/?curator_clanid=4777282" target="_blank" rel="noopener">
+                    <span class="game-row-arrow">＋</span>
+                </article>
+                <article class="game-row" style="--row-color:#486dcc"
+                         data-time="15+ Hours"
+                         data-genre="Adventure"
+                         data-desc="Best story game I've ever played. The lore in DBH is fucking massive and I spent many years reading into it, replaying the game and watching many videos of people exploring the lore. And the soundtrack... I lose my mind. Also - the graphics. I think DBh has the best graphics of all games on Earth, even GTA6 can't compete with it imho."
+                         tabindex="0" role="button" aria-label="Open Detroit: Become Human details">
                     <span class="game-row-num">09</span>
                     <div class="game-row-cover">
                         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1222140/capsule_616x353.jpg?t=1667468479" alt="">
@@ -447,12 +668,16 @@
                             <span class="game-badge" style="--card-color:#486dcc">15+ Hours</span>
                     </div>
                     <div class="game-row-sub">Best story game I've ever played. · Adventure</div></div>
-                    <span class="game-row-arrow">↗</span>
-                </a>
+                    <span class="game-row-arrow">＋</span>
+                </article>
             </div>
 
             <!-- ── DESTINY 2 EXCLUSIVE SPOTLIGHT ── -->
-            <a class="d2-spotlight top-pick reveal" style="--card-color:#698dad" href="https://store.steampowered.com/app/1085660/Destiny_2/" target="_blank" rel="noopener">
+            <article class="d2-spotlight top-pick reveal" style="--card-color:#698dad"
+                     data-time="1500+ Hours"
+                     data-genre="First-Person Shooter · Looter Shooter"
+                     data-desc="Best game I've ever played. I absolutely love it. I'll keep loving it no matter what. The lore - endless, this game is actually the only one in which I actually explore the lore this deep. The graphics and game desing are amazing too, for me at least. The soundtrack - no words can describe it enough, it is an absolute masterpiece. My love for Destiny is endless."
+                     tabindex="0" role="button" aria-label="Open Destiny 2 details">
                 <div class="d2-cover">
                     <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1085660/5135b68cc0abc626b0104bf4b7f7934a5b0a5a26/capsule_616x353_2x.jpg?t=1781045588" alt="Destiny 2">
                     <div class="d2-cover-fade"></div>
@@ -464,16 +689,16 @@
                         <span class="d2-exclusive-badge">1500+ hours</span>
                     </div>
                     <div class="d2-title">Destiny 2</div>
-                    <div class="d2-sub">Best game I've ever played. I absolutely love it despite what Bungie did to it. There's nothing else like it. Sad to see it go...</div>
+                    <div class="d2-sub">Best game I've ever played. I absolutely love it despite what Bungie did to it. There's nothing else like it.</div>
                     <div class="d2-tags">
                         <span class="d2-tag">First-Person Shooter</span>
                         <span class="d2-tag">Looter Shooter</span>
                         <span class="d2-tag">MMO</span>
                         <span class="d2-tag">Sci-Fi</span>
                     </div>
-                    <span class="d2-link">View on Steam ↗</span>
+                    <span class="d2-link">Open details ＋</span>
                 </div>
-            </a>
+            </article>
 
         </section>
 
@@ -489,6 +714,42 @@
             </p>
         </div>
     </footer>
+
+    <!-- ══ GAME DETAIL POPUP (content filled from the clicked item's data) ══ -->
+    <div class="gmodal-backdrop" id="gameModal" role="dialog" aria-modal="true" aria-labelledby="gmTitle">
+        <div class="gmodal" id="gameModalCard">
+            <div class="gmodal-bg" id="gmBg"></div>
+            <div class="gmodal-dim"></div>
+            <div class="gmodal-scroll" id="gmScroll">
+                <div class="gmodal-hero" id="gmHero">
+                    <img id="gmImg" alt="">
+                    <div class="gmodal-hero-fade"></div>
+                </div>
+                <div class="gmodal-body">
+                    <div class="gmodal-head">
+                        <div>
+                            <p class="gmodal-label"><span></span>Game details</p>
+                            <h2 class="gmodal-title" id="gmTitle"></h2>
+                        </div>
+                        <button class="gmodal-close" id="gmClose" type="button" aria-label="Close">
+                            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
+                        </button>
+                    </div>
+                    <div class="gmodal-meta">
+                        <div class="gmodal-meta-item">
+                            <span class="gmodal-meta-label">Time played</span>
+                            <span class="gmodal-meta-value" id="gmTime"></span>
+                        </div>
+                        <div class="gmodal-meta-item">
+                            <span class="gmodal-meta-label">Genre</span>
+                            <span class="gmodal-meta-value" id="gmGenre"></span>
+                        </div>
+                    </div>
+                    <div class="gmodal-note" id="gmNote" tabindex="0"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
     (() => {
@@ -546,6 +807,93 @@
             }
 
             el.appendChild(wrapper);
+        });
+
+        // ── Game detail popup ──
+        // One shared dialog, filled from the clicked item's data attributes.
+        // Title falls back to the item's own title element; image falls back
+        // to the item's cover <img>. Time, genre and text are never scraped.
+        const gameModal  = document.getElementById('gameModal');
+        const gameCardEl = document.getElementById('gameModalCard');
+        const gameBg     = document.getElementById('gmBg');
+        const gameScroll = document.getElementById('gmScroll');
+        const gameHero   = document.getElementById('gmHero');
+        const gameImg    = document.getElementById('gmImg');
+        const gameTitle  = document.getElementById('gmTitle');
+        const gameTime   = document.getElementById('gmTime');
+        const gameGenre  = document.getElementById('gmGenre');
+        const gameNote   = document.getElementById('gmNote');
+        const gameClose  = document.getElementById('gmClose');
+
+        const gameItems = document.querySelectorAll('.game-card, .game-row, .d2-spotlight');
+        let lastGameItem = null;
+
+        function itemTitle(el) {
+            if (el.dataset.title) return el.dataset.title;
+            const t = el.querySelector('.game-title, .game-row-title, .d2-title');
+            return t ? t.textContent.trim() : '';
+        }
+
+        function itemImage(el) {
+            if (el.dataset.img) return el.dataset.img;
+            const img = el.querySelector('img');
+            return img ? img.getAttribute('src') : '';
+        }
+
+        function openGamePopup(el) {
+            const accent = el.dataset.color
+                        || el.style.getPropertyValue('--card-color').trim()
+                        || el.style.getPropertyValue('--row-color').trim()
+                        || 'var(--duo-a)';
+            const image  = itemImage(el);
+            const title  = itemTitle(el);
+
+            gameCardEl.style.setProperty('--g-color', accent);
+            gameBg.style.setProperty('--gmodal-img', image ? `url("${image}")` : 'none');
+
+            if (image) {
+                gameImg.src = image;
+                gameImg.alt = title;
+                gameHero.style.display = '';
+            } else {
+                gameImg.removeAttribute('src');
+                gameHero.style.display = 'none';
+            }
+
+            gameTitle.textContent = title;
+            gameTime.textContent  = el.dataset.time  || '—';
+            gameGenre.textContent = el.dataset.genre || '—';
+            gameNote.textContent  = el.dataset.desc  || '';
+
+            gameScroll.scrollTop = 0;
+            gameModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            lastGameItem = el;
+            gameClose.focus({ preventScroll: true });
+        }
+
+        function closeGamePopup() {
+            if (!gameModal.classList.contains('open')) return;
+            gameModal.classList.remove('open');
+            document.body.style.overflow = '';
+            if (lastGameItem) lastGameItem.focus({ preventScroll: true });
+            lastGameItem = null;
+        }
+
+        gameItems.forEach(el => {
+            el.addEventListener('click', () => openGamePopup(el));
+            el.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+                    e.preventDefault();
+                    openGamePopup(el);
+                }
+            });
+        });
+
+        gameClose.addEventListener('click', closeGamePopup);
+        gameModal.addEventListener('click', e => { if (e.target === gameModal) closeGamePopup(); });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && gameModal.classList.contains('open')) closeGamePopup();
         });
 
     })();
